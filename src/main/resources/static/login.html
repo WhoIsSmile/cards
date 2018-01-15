@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.1/jquery.js"></script>
+    <title>登录</title>
+</head>
+<body>
+
+<table>
+
+    <tr>
+        <td>聊天室登录</td>
+    </tr>
+    <tr>
+        <td>用户</td>
+        <td><input type="text" name="userName" id="userName"/></td>
+    </tr>
+    <tr>
+        <td>用户</td>
+        <td><input type="password" name="password" id="password"/></td>
+    </tr>
+    <tr>
+        <td><input type="button" onclick="onSubmit();" value="登录" name="submit" id="submit"></td>
+        <td></td>
+    </tr>
+
+</table>
+<script type="text/javascript">
+    var onSubmit = function () {
+        var userName = $("#userName").val();
+        var password = $("#password").val();
+        $.ajax({
+            url: "./u/login",
+            dataType: "json",
+            data: {"userName": userName,
+                        "password": password},
+            success: function (result) {
+                console.log(result.result);
+                window.location.href='abc.html';
+//            $(this).addClass("done");
+            }
+        });
+    }
+
+</script>
+</body>
+</html>
