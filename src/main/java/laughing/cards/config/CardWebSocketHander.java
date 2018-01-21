@@ -8,9 +8,7 @@ import org.springframework.web.socket.*;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -22,10 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CardWebSocketHander implements WebSocketHandler {
 
     /**
-     * 以后可以修改成redis版本的
+     * 单机还可以，多机怎么办
      */
-//    private static final ArrayList<WebSocketSession> users = new ArrayList<>();
-
     private static final ConcurrentHashMap<String, WebSocketSession> users = new ConcurrentHashMap<>();
 
     /**
@@ -39,11 +35,6 @@ public class CardWebSocketHander implements WebSocketHandler {
             log.info("userName= {}", userName);
             users.put(userName, session);
         }
-
-//        if (userName != null) {
-//            int count = 5;
-//            session.sendMessage(new TextMessage(count + ""));
-//        }
     }
 
     /**
