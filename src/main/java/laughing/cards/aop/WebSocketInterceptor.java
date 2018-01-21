@@ -1,5 +1,6 @@
 package laughing.cards.aop;
 
+import laughing.cards.constant.CommonConstant;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -9,21 +10,22 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
-import static laughing.cards.constant.CommonConstant.USER_NAME;
 
+/**
+ * 拦截器
+ * @author laughing
+ */
 public class WebSocketInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
-
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest serverHttpRequest = (ServletServerHttpRequest) request;
             HttpSession session = serverHttpRequest.getServletRequest().getSession(false);
-
-
+            String roomNum = ((ServletServerHttpRequest) request).getServletRequest().getParameter("room");
             if (session != null) {
-                String userName1 = session.getAttribute(USER_NAME).toString();
-                map.put(USER_NAME, session.getAttribute(USER_NAME));
+                map.put(CommonConstant.USER_NAME, session.getAttribute(CommonConstant.USER_NAME));
+                map.put(CommonConstant.CHAT_ROOM, roomNum);
             }
 
         }

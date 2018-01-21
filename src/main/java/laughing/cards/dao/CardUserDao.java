@@ -24,6 +24,16 @@ public class CardUserDao {
     }
 
     /**
+     * 获取用户WebSession
+     *
+     * @param userName
+     * @return
+     */
+    public static WebSocketSession getUserWebSession(String userName) {
+        return cardSession.get(userName);
+    }
+
+    /**
      * 用户下线
      *
      * @param userName
@@ -33,8 +43,8 @@ public class CardUserDao {
         Object roomNumInfo = session.getAttributes().get(CommonConstant.CHAT_ROOM);
         String roomNum = roomNumInfo == null ? "" : roomNumInfo.toString();
         cardSession.remove(userName);
-        if (StringUtils.isNotEmpty(roomNum)) {
-            ChatRoomDao.leaveRoom(roomNum, userName);
-        }
+//        if (StringUtils.isNotEmpty(roomNum)) {
+//            ChatRoomDao.leaveRoom(roomNum, userName);
+//        }
     }
 }
