@@ -15,6 +15,10 @@ public class CommonConstant {
      */
     public static final String CHAT_ROOM = "CHAT_ROOM";
 
+    /**
+     * 字符串分隔符
+     */
+    public static final String ADAPSPLIT = "$";
 
 
 }

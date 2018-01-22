@@ -8,4 +8,5 @@ import lombok.Data;
  */
 @Data
 public class RoomMessage extends ParentMessage {
+    private String roomNum;
 }
