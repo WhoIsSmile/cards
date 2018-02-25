@@ -18,6 +18,8 @@ public class MailMessage extends AbstractMessage {
 
 
     /**
+     * 发送信息
+     *
      * @param toUser
      * @param content
      * @return
