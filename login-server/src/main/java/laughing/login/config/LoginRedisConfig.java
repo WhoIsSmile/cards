@@ -12,5 +12,4 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 public class LoginRedisConfig extends RedisConfig {
 
-
 }

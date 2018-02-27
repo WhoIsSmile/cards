@@ -1,6 +1,6 @@
 package laughing.utils.message.mail.tool;
 
-import laughing.utils.globel.ErrorEnum;
+import laughing.utils.global.ErrorEnum;
 import laughing.utils.message.exception.MessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package laughing.login.exception;
 
 import laughing.utils.exception.LaughingException;
-import laughing.utils.globel.ErrorEnum;
+import laughing.utils.global.ErrorEnum;
 
 /**
  * @author laughing

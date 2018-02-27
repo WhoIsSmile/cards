@@ -1,6 +1,6 @@
 package laughing.utils.response;
 
-import laughing.utils.globel.ErrorEnum;
+import laughing.utils.global.ErrorEnum;
 import lombok.Data;
 
 /**

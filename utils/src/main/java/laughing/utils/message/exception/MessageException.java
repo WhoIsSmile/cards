@@ -2,7 +2,7 @@ package laughing.utils.message.exception;
 
 
 import laughing.utils.exception.LaughingException;
-import laughing.utils.globel.ErrorEnum;
+import laughing.utils.global.ErrorEnum;
 
 /**
  * 发送信息报错

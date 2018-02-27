@@ -1,7 +1,7 @@
 package laughing.utils.exception;
 
 
-import laughing.utils.globel.ErrorEnum;
+import laughing.utils.global.ErrorEnum;
 
 /**
  * 异常

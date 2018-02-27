@@ -1,4 +1,4 @@
-package laughing.utils.globel;
+package laughing.utils.global;
 
 /**
  * @author laughing

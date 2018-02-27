@@ -2,7 +2,7 @@ package laughing.login.aop;
 
 
 import laughing.utils.exception.LaughingException;
-import laughing.utils.globel.ErrorEnum;
+import laughing.utils.global.ErrorEnum;
 import laughing.utils.response.RsResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
