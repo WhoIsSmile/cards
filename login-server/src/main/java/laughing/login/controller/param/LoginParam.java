@@ -11,6 +11,13 @@ public class LoginParam {
 
     private String userName;
     private String password;
-    private String loginType;
+    /**
+     * 服务类型
+     */
+    private String serviceType;
+    /**
+     * 回调地址
+     */
+    private String callBack;
 
 }

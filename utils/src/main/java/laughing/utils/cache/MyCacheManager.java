@@ -1,11 +1,11 @@
 package laughing.utils.cache;
 
-import laughing.utils.constant.GlobelConstant;
+import laughing.utils.constant.GlobalConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author laughing
  */
-@Component
+@Service
 @Slf4j
-public class CacheManager {
+public class MyCacheManager {
 
     @Value("${cache.switch:true}")
     private boolean cacheSwitch;
@@ -37,10 +37,10 @@ public class CacheManager {
         StringBuilder cacheKey = new StringBuilder();
         if (parmas.length > 0) {
             for (String param : parmas) {
-                cacheKey.append(param).append(GlobelConstant.ADAPSPLIT);
+                cacheKey.append(param).append(GlobalConstant.ADAPSPLIT);
             }
             String key = cacheKey.toString();
-            if (key.lastIndexOf(GlobelConstant.ADAPSPLIT) == key.length() - 1) {
+            if (key.lastIndexOf(GlobalConstant.ADAPSPLIT) == key.length() - 1) {
                 key = key.substring(0, key.length() - 1);
             }
             key = String.format(cacheHead, key);
@@ -85,7 +85,6 @@ public class CacheManager {
             redisTemplate.opsForValue().set(key, value, times, TimeUnit.MINUTES);
         }
     }
-
 
 
     /**

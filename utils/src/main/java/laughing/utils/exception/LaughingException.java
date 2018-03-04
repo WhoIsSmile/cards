@@ -12,9 +12,11 @@ import laughing.utils.global.ErrorEnum;
 public class LaughingException extends RuntimeException {
     private ErrorEnum errorEnum;
 
+    private String errorMsg;
 
     public LaughingException(ErrorEnum errorEnum) {
         super(errorEnum.getErrorMsg());
+        setErrorEnum(errorEnum);
     }
 
     public LaughingException(String message) {
@@ -41,4 +43,11 @@ public class LaughingException extends RuntimeException {
         this.errorEnum = errorEnum;
     }
 
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
 }

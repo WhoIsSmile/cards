@@ -2,10 +2,7 @@ package laughing.cards.service;
 
 import laughing.cards.cache.CacheManager;
 import laughing.cards.constant.RedisConstant;
-import laughing.cards.message.Message;
-import laughing.cards.tool.StringTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class RegisterService extends CacheManager {
-    @Autowired
-    private Message message;
+//    @Autowired
+//    private Message message;
 
     @Value("${verification.code.cache.time:10}")
     private int verificationCodeCacheTime;
@@ -27,17 +24,17 @@ public class RegisterService extends CacheManager {
      *
      * @param toUser
      */
-    public boolean sendVerificationCode(String toUser) {
-        // 验证码
-        String verificationCode = StringTool.getVerificationCode();
-        log.info("User :{}  verification code :{} ", toUser, verificationCode);
-        boolean result = message.seanMessage(toUser, verificationCode);
-        if (result) {
-            String key = getCacheKey(RedisConstant.USER_VERIFICATION_CODE, toUser);
-            setCache(key, verificationCode, verificationCodeCacheTime);
-        }
-        return result;
-    }
+//    public boolean sendVerificationCode(String toUser) {
+//        // 验证码
+//        String verificationCode = StringTool.getVerificationCode();
+//        log.info("User :{}  verification code :{} ", toUser, verificationCode);
+//        boolean result = message.seanMessage(toUser, verificationCode);
+//        if (result) {
+//            String key = getCacheKey(RedisConstant.USER_VERIFICATION_CODE, toUser);
+//            setCache(key, verificationCode, verificationCodeCacheTime);
+//        }
+//        return result;
+//    }
 
     /**
      * 检查验证码

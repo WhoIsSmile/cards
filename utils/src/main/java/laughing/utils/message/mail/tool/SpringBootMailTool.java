@@ -20,7 +20,7 @@ public class SpringBootMailTool {
     @Autowired
     private JavaMailSender sender;
 
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.username:111}")
     private String from;
 
     /**

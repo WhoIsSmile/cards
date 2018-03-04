@@ -26,7 +26,7 @@ public class UserEntity {
     /**
      * 电话
      */
-    private String phone;
+    private String phoneNum;
     /**
      * 邮件
      */

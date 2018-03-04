@@ -2,8 +2,8 @@ package laughing.login.dao.impl;
 
 import com.alibaba.fastjson.JSON;
 import laughing.login.dao.UserDao;
-import laughing.utils.cache.CacheManager;
-import laughing.utils.cache.GlobelCacheKey;
+import laughing.utils.cache.MyCacheManager;
+import laughing.utils.cache.GlobalCacheKey;
 import laughing.utils.entity.UserEntity;
 import laughing.utils.tool.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class RedisUserDaoImpl implements UserDao {
 
 
     @Autowired
-    private CacheManager cacheManager;
+    private MyCacheManager myCacheManager;
 
     IdWorker idWorker = new IdWorker(15, 15);
 
@@ -30,18 +30,18 @@ public class RedisUserDaoImpl implements UserDao {
      */
     @Override
     public UserEntity getUserByUserName(String userName) {
-        String cacheKey = cacheManager.getCacheKey(GlobelCacheKey.USER_NAME_KEY, userName);
-        String value = cacheManager.getCacheValue2Str(cacheKey);
+        String cacheKey = myCacheManager.getCacheKey(GlobalCacheKey.USER_NAME_KEY, userName);
+        String value = myCacheManager.getCacheValue2Str(cacheKey);
         UserEntity user = JSON.parseObject(value, UserEntity.class);
         return user;
     }
 
     @Override
     public UserEntity saveUserEntity(UserEntity userEntity) {
-        String cacheKey = cacheManager.getCacheKey(GlobelCacheKey.USER_NAME_KEY, userEntity.getUserName());
+        String cacheKey = myCacheManager.getCacheKey(GlobalCacheKey.USER_NAME_KEY, userEntity.getUserName());
         userEntity.setUserId(idWorker.nextId() + "");
         String json = JSON.toJSON(userEntity).toString();
-        cacheManager.saveInfo(cacheKey, json);
+        myCacheManager.saveInfo(cacheKey, json);
         return userEntity;
     }
 

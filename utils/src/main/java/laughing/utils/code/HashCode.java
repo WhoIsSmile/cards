@@ -1,4 +1,7 @@
-package laughing.cards.tool.code;
+package laughing.utils.code;
+
+import laughing.utils.exception.LaughingException;
+import laughing.utils.global.ErrorEnum;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +38,15 @@ public class HashCode {
             result += temp;
         }
         return result;
+    }
+
+    public static String md5Hash(String string) {
+        try {
+            String result = hash(string, "MD5");
+            return result;
+        } catch (Exception e) {
+            throw new LaughingException(ErrorEnum.CODE_ERROR);
+        }
     }
 
     /**

@@ -12,10 +12,12 @@ public enum ErrorEnum {
      * 缺少必要参数
      */
     PARAM_IS_NULL("-0001", "参数为空"),
+    CODE_ERROR("-0100", "加密错误"),
 
     NO_PAIR("-1000", "不是对子"),
     TOO_MANY_PEOPLE("-1100", "太多人了"),
     SEND_MESSAGE_FAIL("-2000", "发送信息失败"),
+    PASSWORD_ERROR("-3000", "密码错误"),
     SYSTEM_ERROR("-9999", "系统异常");
 
     private ErrorEnum() {

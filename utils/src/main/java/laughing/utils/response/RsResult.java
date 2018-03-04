@@ -13,7 +13,7 @@ import lombok.Data;
 public class RsResult<T> {
     private String resultCode = ErrorEnum.SUCCESS.getErrorCode();
     private String resultMsg = ErrorEnum.SUCCESS.getErrorMsg();
-    private T resultBody = (T) new Object();
+    private T resultBody;
 
     public RsResult() {
     }
