@@ -6,19 +6,19 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>utils</artifactId>
+    <artifactId>login-client</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+            <groupId>laughing</groupId>
+            <artifactId>utils</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
+   
     </dependencies>
     <build>
-        <finalName>utils</finalName>
+        <finalName>login-client</finalName>
     </build>
 </project>

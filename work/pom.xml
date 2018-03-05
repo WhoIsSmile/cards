@@ -11,7 +11,16 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>
-
+        <dependency>
+            <groupId>laughing</groupId>
+            <artifactId>utils</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>laughing</groupId>
+            <artifactId>login-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>work</finalName>

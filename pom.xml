@@ -11,6 +11,7 @@
         <module>work</module>
         <module>web</module>
         <module>utils</module>
+        <module>login-client</module>
     </modules>
     <packaging>pom</packaging>
 

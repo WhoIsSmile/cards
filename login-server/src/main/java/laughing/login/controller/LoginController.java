@@ -51,7 +51,7 @@ public class LoginController {
                            LoginParam loginParams) throws Exception {
         try {
             String token = loginService.getToken(loginParams);
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             session.setAttribute(GlobalConstant.LOGIN_USER_TOKEN_SESSION, token);
             return "redirect:" + loginParams.getCallBack() + "?token=" + token;
         } catch (Exception e) {
@@ -99,10 +99,10 @@ public class LoginController {
     @RequestMapping("login")
     private String userLogin(HttpServletRequest request, HttpServletResponse response) {
         String callBack = request.getParameter("callBack");
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(true);
         Object token = session.getAttribute(GlobalConstant.LOGIN_USER_TOKEN_SESSION);
         if (token == null) {
-            return "redirect:" + loginPage;
+            return "redirect:" + loginPage + "?callBack=" + callBack;
         }
         return "redirect:" + callBack + "?token=" + token;
     }
