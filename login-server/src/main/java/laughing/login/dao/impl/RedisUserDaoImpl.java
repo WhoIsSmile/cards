@@ -2,11 +2,16 @@ package laughing.login.dao.impl;
 
 import com.alibaba.fastjson.JSON;
 import laughing.login.dao.UserDao;
+import laughing.login.exception.LoginException;
 import laughing.utils.cache.MyCacheManager;
 import laughing.utils.cache.GlobalCacheKey;
 import laughing.utils.entity.UserEntity;
+import laughing.utils.global.ErrorEnum;
 import laughing.utils.tool.IdWorker;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,8 +19,11 @@ import org.springframework.stereotype.Service;
  * @date 2018-02-27 21:12:29
  */
 @Service
+@Slf4j
 public class RedisUserDaoImpl implements UserDao {
 
+    @Value("${login.cookie.cache.time:3}")
+    private int cacheTime;
 
     @Autowired
     private MyCacheManager myCacheManager;
@@ -48,6 +56,23 @@ public class RedisUserDaoImpl implements UserDao {
     @Override
     public boolean checkUserExist(String userName) {
         return getUserByUserName(userName) == null ? false : true;
+    }
+
+    @Override
+    public void cacheToken(String token, String userName) {
+        String cacheKey = myCacheManager.getCacheKey(GlobalCacheKey.USER_NAME_KEY, token);
+        myCacheManager.setCache(cacheKey, userName, 60 * cacheTime);
+    }
+
+    @Override
+    public UserEntity getUserByToken(String token) {
+        String cacheKey = myCacheManager.getCacheKey(GlobalCacheKey.USER_NAME_KEY, token);
+        String userName = myCacheManager.getCacheValue2Str(cacheKey);
+        if (StringUtils.isBlank(userName)) {
+            log.error("token 过期");
+            throw new LoginException(ErrorEnum.LOGIN_TOKEN_EXPIRE);
+        }
+        return getUserByUserName(userName);
     }
 
 

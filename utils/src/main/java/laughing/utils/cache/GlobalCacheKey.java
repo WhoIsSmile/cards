@@ -9,4 +9,9 @@ public class GlobalCacheKey {
      * 用户名 key
      */
     public static final String USER_NAME_KEY = "global:user:name:%s";
+
+    /**
+     * token key
+     */
+    public static final String USER_TOKEN_KEY = "global:user:token:%s";
 }

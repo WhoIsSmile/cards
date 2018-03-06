@@ -1,5 +1,6 @@
 package laughing.login.service;
 
+import com.alibaba.fastjson.JSON;
 import laughing.login.controller.param.LoginParam;
 import laughing.login.controller.param.RegisterParam;
 import laughing.login.dao.UserDao;
@@ -26,13 +27,7 @@ public class LoginService {
 
     @Autowired
     private UserDao redisUserDaoImpl;
-    /**
-     *
-     */
-    @Autowired
-    private MyCacheManager myCacheManager;
-    @Value("${login.token.cache:12}")
-    private  int time;
+
 
     /**
      * 用户登录 获取token
@@ -46,10 +41,10 @@ public class LoginService {
         String hashPassword = HashCode.md5Hash(loginParam.getPassword());
         if (!hashPassword.equals(password)) {
             log.error("密码错误 {}", loginParam.toString());
-            throw new LoginException(ErrorEnum.PASSWORD_ERROR);
+            throw new LoginException(ErrorEnum.LOGIN_PASSWORD_ERROR);
         }
         String token = UUID.randomUUID().toString().replace("_", "");
-        myCacheManager.setCache(token, userName, 60 * time);
+        redisUserDaoImpl.cacheToken(token, userName);
         log.info("token : {}  | user : {}", token, userName);
         return token;
     }
@@ -72,7 +67,24 @@ public class LoginService {
     }
 
 
+    /**
+     * 根据token获取用户
+     *
+     * @param token
+     * @return
+     */
+    public UserEntity getUserByToken(String token) {
+        UserEntity userEntity = redisUserDaoImpl.getUserByToken(token);
+        if (userEntity == null) {
+            log.error("用户不存在");
+            throw new LoginException(ErrorEnum.LOGIN_USER_NOT_EXIST);
+        }
+        return userEntity;
+    }
+
     private String codePassword(String password) {
         return HashCode.md5Hash(password);
     }
+
+
 }

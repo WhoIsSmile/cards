@@ -22,4 +22,10 @@ public class RsResult<T> {
         this.resultCode = errorEnum.getErrorCode();
         this.resultMsg = errorEnum.getErrorMsg();
     }
+
+    public RsResult(ErrorEnum errorEnum, T body) {
+        this.resultCode = errorEnum.getErrorCode();
+        this.resultMsg = errorEnum.getErrorMsg();
+        resultBody = body;
+    }
 }

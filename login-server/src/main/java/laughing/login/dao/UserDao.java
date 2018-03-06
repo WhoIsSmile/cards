@@ -30,4 +30,15 @@ public interface UserDao {
      * @return
      */
     public boolean checkUserExist(String userName);
+
+    public void cacheToken(String token, String userName);
+
+    /**
+     * 根据Token 获取用户信息
+     *
+     * @param token
+     * @return
+     */
+    public UserEntity getUserByToken(String token);
+
 }
