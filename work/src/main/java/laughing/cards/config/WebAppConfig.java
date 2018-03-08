@@ -12,10 +12,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 public class WebAppConfig extends WebMvcConfigurerAdapter {
+
+    /**
+     * 授权接口
+     */
     @Value("${login.sso.auth.server:http://localhost:9001/u/auth}")
     private String authUrl;
 
-    @Value("${login.sso.auth.server:http://localhost:9001/u/getUserInfo}")
+    /**
+     * 获取用户信息
+     */
+    @Value("${login.sso.userInfo.server:http://localhost:9001/u/getUserInfo}")
     private String userInfoUrl;
 
     @Override

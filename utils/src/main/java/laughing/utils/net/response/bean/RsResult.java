@@ -1,4 +1,4 @@
-package laughing.utils.response;
+package laughing.utils.net.response.bean;
 
 import laughing.utils.global.ErrorEnum;
 import lombok.Data;
@@ -28,4 +28,5 @@ public class RsResult<T> {
         this.resultMsg = errorEnum.getErrorMsg();
         resultBody = body;
     }
+
 }

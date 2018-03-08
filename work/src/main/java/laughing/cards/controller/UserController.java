@@ -17,12 +17,13 @@ public class UserController {
 
     @RequestMapping("login")
     public Object login(HttpServletRequest request, HttpSession session){
-        String userName = request.getParameter("userName");
-        String password = request.getParameter("password");
-        session.setAttribute(USER_NAME,userName);
+//        String userName = request.getParameter("userName");
+//        String password = request.getParameter("password");
+//        session.setAttribute(USER_NAME,userName);
         Map<String ,String> result = new HashMap<>();
         result.put("result","true");
         return result;
     }
 
+//    public Object aaa()
 }

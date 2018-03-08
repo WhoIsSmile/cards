@@ -41,4 +41,6 @@ public interface UserDao {
      */
     public UserEntity getUserByToken(String token);
 
+    public String getUserNameByToken(String token);
+
 }

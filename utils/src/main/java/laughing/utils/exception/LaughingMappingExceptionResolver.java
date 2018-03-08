@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import laughing.utils.global.ErrorEnum;
-import laughing.utils.response.RsResult;
+import laughing.utils.net.response.bean.RsResult;
 import org.springframework.http.MediaType;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -28,13 +28,12 @@ public class LaughingMappingExceptionResolver extends SimpleMappingExceptionReso
     protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response,
                                               Object handler, Exception ex) {
         HandlerMethod method = (HandlerMethod) handler;
-//        ResponseBody body = method.getMethodAnnotation(ResponseBody.class);
+        ResponseBody body = method.getMethodAnnotation(ResponseBody.class);
+        RestController restController = method.getBeanType().getAnnotation(RestController.class);
         StringBuilder errorMsg = new StringBuilder();
         errorMsg.append(method.getMethod().getName()).append(" error cause : ").append(ex.getMessage());
-        ex.printStackTrace();
-        logger.error(errorMsg.toString());
-        // 判断是否是页面请求（text/html）
-        if (!isAjax(request)) {
+        // 判断是否ajax
+        if (body == null && restController == null) {
             return super.doResolveException(request, response, handler, ex);
         }
         ModelAndView mv = new ModelAndView();
@@ -48,8 +47,10 @@ public class LaughingMappingExceptionResolver extends SimpleMappingExceptionReso
             LaughingException exception = (LaughingException) ex;
             result = new RsResult(exception.getErrorEnum());
         } else {
+            ex.printStackTrace();
             result = new RsResult(ErrorEnum.SYSTEM_ERROR);
         }
+        logger.error(errorMsg.toString());
         try {
             response.getWriter().write(JSON.toJSONString(result));
         } catch (IOException e) {

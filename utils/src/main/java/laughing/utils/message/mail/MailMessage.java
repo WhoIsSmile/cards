@@ -4,13 +4,12 @@ import laughing.utils.message.AbstractMessage;
 import laughing.utils.message.mail.bean.MailTemplate;
 import laughing.utils.message.mail.tool.SpringBootMailTool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * @author laughing
  * @date 2018-01-22 14:10:06
  */
-@Service
+
 public class MailMessage extends AbstractMessage {
 
     @Autowired

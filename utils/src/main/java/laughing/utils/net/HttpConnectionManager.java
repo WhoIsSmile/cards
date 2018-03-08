@@ -1,4 +1,4 @@
-package laughing.utils.http;
+package laughing.utils.net;
 
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;

@@ -66,14 +66,20 @@ public class RedisUserDaoImpl implements UserDao {
 
     @Override
     public UserEntity getUserByToken(String token) {
-        String cacheKey = myCacheManager.getCacheKey(GlobalCacheKey.USER_NAME_KEY, token);
-        String userName = myCacheManager.getCacheValue2Str(cacheKey);
+
+        String userName = this.getUserNameByToken(token);
         if (StringUtils.isBlank(userName)) {
-            log.error("token 过期");
+            log.error("token 过期 : {}", token);
             throw new LoginException(ErrorEnum.LOGIN_TOKEN_EXPIRE);
         }
         return getUserByUserName(userName);
     }
 
+    @Override
+    public String getUserNameByToken(String token) {
+        String cacheKey = myCacheManager.getCacheKey(GlobalCacheKey.USER_NAME_KEY, token);
+        String userName = myCacheManager.getCacheValue2Str(cacheKey);
+        return userName;
+    }
 
 }

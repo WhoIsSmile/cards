@@ -1,4 +1,4 @@
-package laughing.utils.http;
+package laughing.utils.net;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.*;
@@ -125,6 +125,7 @@ public class HttpClientUtil {
                 httpPost.setHeaders(headers);
             }
             httpPost.setConfig(config);
+//            httpPost.addHeader("Content-Type", "application/json");
             if (params != null) {
                 List<NameValuePair> formParams = mapToNameValuePair(params);
                 UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, coding);
@@ -162,11 +163,11 @@ public class HttpClientUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            httpclient.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            httpclient.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 //	public static String doPost(String url, String postContent, String coding,
 //			String contentType) throws Exception {

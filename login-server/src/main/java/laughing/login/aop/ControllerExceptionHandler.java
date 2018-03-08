@@ -4,7 +4,7 @@
 //import laughing.login.exception.LoginException;
 //import laughing.utils.exception.LaughingException;
 //import laughing.utils.global.ErrorEnum;
-//import laughing.utils.response.RsResult;
+//import laughing.utils.http.response.RsResult;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.web.bind.annotation.ControllerAdvice;
 //import org.springframework.web.bind.annotation.ExceptionHandler;

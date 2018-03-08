@@ -1,18 +1,16 @@
 package laughing.login.service;
 
-import com.alibaba.fastjson.JSON;
 import laughing.login.controller.param.LoginParam;
 import laughing.login.controller.param.RegisterParam;
 import laughing.login.dao.UserDao;
 import laughing.login.exception.LoginException;
 
-import laughing.utils.cache.MyCacheManager;
 import laughing.utils.code.HashCode;
 import laughing.utils.entity.UserEntity;
 import laughing.utils.global.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -86,5 +84,12 @@ public class LoginService {
         return HashCode.md5Hash(password);
     }
 
+    public boolean checkTokenVaild(String token) {
+        String userName = redisUserDaoImpl.getUserNameByToken(token);
+        if (StringUtils.isBlank(userName)) {
+            return false;
+        }
+        return true;
+    }
 
 }

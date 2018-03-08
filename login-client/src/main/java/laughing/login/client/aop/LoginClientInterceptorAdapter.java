@@ -1,8 +1,8 @@
 package laughing.login.client.aop;
 
 import laughing.login.client.constant.LoginClientConstant;
-import laughing.utils.constant.GlobalConstant;
-import laughing.utils.http.HttpClientUtil;
+import laughing.utils.net.HttpClientUtil;
+import laughing.utils.net.response.util.RsResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 拦截所有请求
@@ -35,32 +36,44 @@ public class LoginClientInterceptorAdapter extends HandlerInterceptorAdapter {
         this.ssoAuthUrl = ssoAuthUrl;
     }
 
+    public static final String CALL_BACK = "callBack";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        //获取session
+        //  获取session
         HttpSession session = request.getSession(true);
+        //  获取token
         String token = request.getParameter("token");
+        //  如果session不为空
         if (session.getAttribute(LoginClientConstant.LOGIN_CLIENT_USER_SESSION) != null) {
             return true;
         }
+        // session 为空 token 为空
         if (StringUtils.isBlank(token)) {
             log.info("------:跳转到login页面！");
-            String visitUrl = getVisitUrl(request);
-            String url = new StringBuffer(ssoAuthUrl).append("?callBack=")
-                    .append(URLEncoder.encode(visitUrl, "UTF-8")).toString();
+            String visitUrl = getVisitUrl(request, null);
+            String url = new StringBuffer(ssoAuthUrl).append("?")
+                    .append(CALL_BACK).append("=").append(URLEncoder.encode(visitUrl, "UTF-8")).toString();
             response.sendRedirect(url);
             return false;
         }
-        //判断用户ID是否存在，不存在就跳转到登录界面
-        if (session.getAttribute(LoginClientConstant.LOGIN_CLIENT_USER_SESSION) == null) {
-            String userInfo = getUserInfo(token);
-            if (StringUtils.isNotBlank(userInfo)) {
-                session.setAttribute(LoginClientConstant.LOGIN_CLIENT_USER_SESSION, userInfo);
-            } else {
-
+        // token不为空
+        String userInfo = getUserInfo(token);
+        if (StringUtils.isNotBlank(userInfo) && RsResultUtil.isSuccess(userInfo)) {
+            String resultBody = RsResultUtil.getResultBody(userInfo);
+            if (StringUtils.isBlank(resultBody)) {
+                log.error("返回为空resultBody");
+                throw new Exception();
             }
-            return false;
+            session.setAttribute(LoginClientConstant.LOGIN_CLIENT_USER_SESSION, resultBody);
+        } else {
+            log.error("返回为空userInfo");
+//            String visitUrl = getVisitUrl(request, "token");
+//            String url = new StringBuffer(ssoAuthUrl).append("?")
+//                    .append(CALL_BACK).append("=").append(URLEncoder.encode(visitUrl, "UTF-8")).toString();
+//            response.sendRedirect(url);
+            throw new Exception();
         }
         return true;
     }
@@ -72,16 +85,45 @@ public class LoginClientInterceptorAdapter extends HandlerInterceptorAdapter {
      * @param request
      * @return
      */
-    private String getVisitUrl(HttpServletRequest request) {
+    private String getVisitUrl(HttpServletRequest request, String excludeParam) {
         StringBuffer urlBuffer = new StringBuffer();
         urlBuffer.append(request.getScheme())
                 .append("://").append(request.getServerName()).append(":").append(request.getServerPort())
                 .append(request.getContextPath())
                 .append(request.getServletPath());
-        if (request.getQueryString() != null) {
-            urlBuffer.append("?").append(request.getQueryString());
+        if (StringUtils.isBlank(excludeParam)) {
+            if (request.getQueryString() != null) {
+                urlBuffer.append("?").append(request.getQueryString());
+            }
+        } else {
+            if (request.getQueryString() != null) {
+                String params = requetToStr(request, excludeParam);
+                if (StringUtils.isNotBlank(params)) {
+                    urlBuffer.append("?").append(params);
+                }
+            }
         }
         return urlBuffer.toString();
+    }
+
+
+    private String requetToStr(HttpServletRequest request, String excludeParam) {
+        Map map = request.getParameterMap();
+        Set key = map.keySet();
+        int i = 0;
+        StringBuffer params = new StringBuffer();
+        for (Object aaa : key.toArray()) {
+            String paraKey = aaa.toString();
+            if (!excludeParam.equals(paraKey)) {
+                String paraValue = (String) map.get(aaa);
+                if (i > 0) {
+                    params.append("&");
+                }
+                params.append(paraKey).append("=").append(paraValue);
+                i = i + 1;
+            }
+        }
+        return params.toString();
     }
 
     public void setSsoUserInfoUrl(String ssoUserInfoUrl) {
