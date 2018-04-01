@@ -24,7 +24,7 @@ public class MailMessage extends AbstractMessage {
      * @return
      */
     @Override
-    public boolean seanMessage(String toUser, String content) {
+    public boolean sendMessage(String toUser, String content) {
         String htmlContent = fillContent(toUser, content);
         springBootMailTool.sendHtmlMail(toUser, getSubject(), htmlContent);
         return true;

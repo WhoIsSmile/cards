@@ -1,6 +1,7 @@
 package laughing.login.client.aop;
 
 import laughing.login.client.constant.LoginClientConstant;
+import laughing.utils.constant.GlobalConstant;
 import laughing.utils.net.HttpClientUtil;
 import laughing.utils.net.response.util.RsResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class LoginClientInterceptorAdapter extends HandlerInterceptorAdapter {
         this.ssoAuthUrl = ssoAuthUrl;
     }
 
-    public static final String CALL_BACK = "callBack";
+    public static final String CALL_BACK = GlobalConstant.LOGIN_CALL_BACK;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

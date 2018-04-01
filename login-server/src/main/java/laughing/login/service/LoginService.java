@@ -53,7 +53,11 @@ public class LoginService {
      * @param registerParam
      */
     public void userRegister(RegisterParam registerParam) {
-        UserEntity userEntity = new UserEntity();
+        UserEntity userEntity = redisUserDaoImpl.getUserByUserName(registerParam.getUserName());
+        if (userEntity != null) {
+            throw new LoginException(ErrorEnum.LOGIN_USER_EXIST);
+        }
+        userEntity = new UserEntity();
         userEntity.setEmail(registerParam.getEmail());
         userEntity.setUserName(registerParam.getUserName());
         userEntity.setPassword(codePassword(registerParam.getPassword()));

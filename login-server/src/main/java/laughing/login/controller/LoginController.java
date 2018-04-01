@@ -57,7 +57,7 @@ public class LoginController {
      */
     @RequestMapping(value = "getToken")
     public String getToken(HttpServletRequest request, HttpServletResponse response,
-                           LoginParam loginParams) throws Exception {
+                           LoginParam loginParams) {
         try {
             String token = loginService.getToken(loginParams);
             CookieUtil.addCookie(response, GlobalConstant.LOGIN_USER_TOKEN_SESSION, token, cookieTime);
@@ -109,7 +109,7 @@ public class LoginController {
      */
     @RequestMapping("auth")
     public String userAuth(HttpServletRequest request, HttpServletResponse response) {
-        String callBack = request.getParameter("callBack");
+        String callBack = request.getParameter(GlobalConstant.LOGIN_CALL_BACK);
         String token = CookieUtil.getCookie(request, GlobalConstant.LOGIN_USER_TOKEN_SESSION);
         if (StringUtils.isBlank(token) || !loginService.checkTokenVaild(token)) {
             if (StringUtils.isNotBlank(token)) {

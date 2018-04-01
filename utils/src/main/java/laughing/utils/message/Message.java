@@ -7,5 +7,5 @@ package laughing.utils.message;
  * @date 2018-01-22 14:26:04
  */
 public interface Message {
-    public boolean seanMessage(String toUser, String conntent);
+    public boolean sendMessage(String toUser, String content);
 }
