@@ -6,6 +6,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
+import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -13,12 +14,17 @@ import java.util.Map;
 
 /**
  * 拦截器
+ *
  * @author laughing
  */
-public class WebSocketInterceptor implements HandshakeInterceptor {
+public class WebSocketInterceptor extends HttpSessionHandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
+        if (request.getHeaders().containsKey("Sec-WebSocket-Extensions")) {
+            request.getHeaders().set("Sec-WebSocket-Extensions",
+                    "permessage-deflate");
+        }
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest serverHttpRequest = (ServletServerHttpRequest) request;
             HttpSession session = serverHttpRequest.getServletRequest().getSession(false);

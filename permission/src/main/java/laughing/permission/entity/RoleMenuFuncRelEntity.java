@@ -9,11 +9,20 @@ import lombok.Data;
  **/
 @Data
 public class RoleMenuFuncRelEntity extends BaseEntity {
+    /**
+     * 角色ID
+     */
     private int roleId;
+    /**
+     * 菜单Id
+     */
     private int menuId;
+    /**
+     * 功能code
+     */
     private String funcCode;
     /**
      * 功能的url
      */
-    private String func_action;
+    private String funcAction;
 }

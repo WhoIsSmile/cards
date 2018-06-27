@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(cardWebSocketHander(),"/chat").addInterceptors(new WebSocketInterceptor());
+        registry.addHandler(cardWebSocketHander(),"/chat").addInterceptors(new WebSocketInterceptor()).withSockJS();
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.socket.*;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -23,7 +24,7 @@ public class CardWebSocketHander implements WebSocketHandler {
     /**
      * 单机还可以，多机怎么办
      */
-//    private static final ConcurrentHashMap<String, WebSocketSession> users = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, WebSocketSession> users = new ConcurrentHashMap<>();
 
     /**
      * client第一次连接服务端时执行
@@ -33,11 +34,7 @@ public class CardWebSocketHander implements WebSocketHandler {
         log.info("连接成功......");
         String userName = getAttributeVal(session, CommonConstant.USER_NAME);
         String roomNum = getAttributeVal(session, CommonConstant.CHAT_ROOM);
-
-        if (StringUtils.isNotBlank(userName)) {
-            log.info("userName= {}", userName);
-            ChatRoomDao.joinRoom(roomNum, userName, session);
-        }
+        users.put(userName,session);
     }
 
     private String getAttributeVal(WebSocketSession session, String key) {
@@ -50,12 +47,9 @@ public class CardWebSocketHander implements WebSocketHandler {
      */
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> webSocketMessage) throws Exception {
-        String roomNum = getAttributeVal(session, CommonConstant.CHAT_ROOM);
         String userName = getAttributeVal(session, CommonConstant.USER_NAME);
-        if (StringUtils.isNotBlank(roomNum) && StringUtils.isNotBlank(userName)) {
-            RoomMessage message = fillRoomMessage(userName, webSocketMessage.getPayload().toString());
-            sendMessageToUsers(toTextMessage(message), roomNum);
-        }
+        users.put(userName,session);
+        sendMessageToUser(userName,"ssss");
     }
 
     /**
@@ -135,16 +129,18 @@ public class CardWebSocketHander implements WebSocketHandler {
      * 给某个client发送消息
      *
      * @param userName
-     * @param message
+
+
      */
-    public void sendMessageToUser(String userName, TextMessage message) {
-//        WebSocketSession user = users.get(userName);
-//        try {
-//            if (user.isOpen()) {
-//                user.sendMessage(message);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    public void sendMessageToUser(String userName,String messagea) {
+        TextMessage message = new TextMessage(messagea);
+        WebSocketSession user = users.get(userName);
+        try {
+            if (user.isOpen()) {
+                user.sendMessage(message);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

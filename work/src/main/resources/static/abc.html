@@ -2,7 +2,8 @@
 <head>
     <meta charset="UTF-8"/>
     <title>index</title>
-    <!--<script type="text/javascript" src="http://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js"></script>-->
+    <!--<script type="text/javascript" src="js/socket.min.js"></script>-->
+    <script type="text/javascript" src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.1/jquery.js"></script>
     <!--<script type="text/javascript" src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>-->
 </head>
@@ -32,13 +33,15 @@
 
     function initWs() {
         //check if your browser supports WebSocket  
-        if ('WebSocket' in window) {
-            var roomNum = $("#room").val();
-            var url = "ws://localhost:8099/chat?room=" + roomNum;
-            websocket = new WebSocket(url);
-        } else {
-            alert('Sorry, websocket not supported by your browser.')
-        }
+//        if ('WebSocket' in window) {
+//            var roomNum = $("#room").val();
+//            var url = "ws://localhost:8099/chat?room=" + roomNum;
+//            websocket = new WebSocket(url);
+//        } else {
+        var roomNum = $("#room").val();
+            var url = "http://localhost:8099/chat?room=" + roomNum;
+            websocket = new  SockJS(url);
+//        }
 
         //Error callback  
         websocket.onerror = function () {
