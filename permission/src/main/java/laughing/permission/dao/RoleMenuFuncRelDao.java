@@ -34,7 +34,7 @@ public class RoleMenuFuncRelDao {
         return result;
     }
 
-    public List<String> findFuncActionByUserId(String userId){
+    public List<String> findFuncActionByUserId(int userId){
         String sql = "select DISTINCT (menuFunc.funcAction) from sys_user_role userRole ,sys_role_menu_func menuFunc where userRole.userId=? and userRole.roleId=menuFunc.roleId";
         List<Object> params = new ArrayList<>(1);
         params.add(userId);

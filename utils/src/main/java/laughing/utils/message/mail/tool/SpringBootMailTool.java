@@ -14,13 +14,12 @@ import org.springframework.stereotype.Service;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 
-@Service
 @Slf4j
 public class SpringBootMailTool {
     @Autowired
     private JavaMailSender sender;
 
-    @Value("${spring.mail.username:111}")
+//    @Value("${spring.mail.username:111}")
     private String from;
 
     /**

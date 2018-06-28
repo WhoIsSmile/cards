@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import laughing.utils.global.ErrorEnum;
 import laughing.utils.net.response.bean.RsResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,8 @@ import com.alibaba.fastjson.JSON;
  * @author laughing
  * @date 2018-03-04 13:32:38
  */
-public class LaughingMappingExceptionResolver extends SimpleMappingExceptionResolver {
+@Slf4j
+public abstract class LaughingMappingExceptionResolver extends SimpleMappingExceptionResolver {
 
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response,
@@ -47,8 +49,11 @@ public class LaughingMappingExceptionResolver extends SimpleMappingExceptionReso
             LaughingException exception = (LaughingException) ex;
             result = new RsResult(exception.getErrorEnum());
         } else {
-            ex.printStackTrace();
-            result = new RsResult(ErrorEnum.SYSTEM_ERROR);
+            result = dowithException(ex);
+            if (result == null) {
+                log.error("error:{}", ex.getCause());
+                result = new RsResult(ErrorEnum.SYSTEM_ERROR);
+            }
         }
         logger.error(errorMsg.toString());
         try {
@@ -62,4 +67,13 @@ public class LaughingMappingExceptionResolver extends SimpleMappingExceptionReso
     private boolean isAjax(HttpServletRequest request) {
         return !request.getHeader("accept").contains(MediaType.TEXT_HTML_VALUE);
     }
+
+
+    /**
+     * 处理特殊的异常
+     *
+     * @param e
+     * @return
+     */
+    public abstract RsResult dowithException(Exception e);
 }

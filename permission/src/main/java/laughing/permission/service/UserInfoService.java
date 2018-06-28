@@ -34,5 +34,5 @@ public interface UserInfoService {
      * @param userId
      * @return
      */
-    public List<String> findFuncActionByUserId(String userId);
+    public List<String> findFuncActionByUserId(int userId);
 }

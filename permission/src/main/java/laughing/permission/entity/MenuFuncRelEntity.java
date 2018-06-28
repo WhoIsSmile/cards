@@ -18,4 +18,9 @@ public class MenuFuncRelEntity extends BaseEntity {
      * 功能Code
      */
     private String funcCode;
+
+    /**
+     * 权限
+     */
+    private String funcAction;
 }

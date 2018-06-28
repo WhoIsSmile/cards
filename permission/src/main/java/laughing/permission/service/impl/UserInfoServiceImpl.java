@@ -38,7 +38,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public List<String> findFuncActionByUserId(String userId) {
+    public List<String> findFuncActionByUserId(int userId) {
         return roleMenuFuncRelDao.findFuncActionByUserId(userId);
     }
 }

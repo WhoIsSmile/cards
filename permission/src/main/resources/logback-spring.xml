@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="30 seconds">
+
+
+    <springProperty scope="context" name="LOG_DIR" source="logging.path" defaultValue="/opt/logs/"/>
+    <!-- 日志级别 -->
+    <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root" defaultValue="info"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%date %level [%thread] %logger %msg%n</Pattern>
+        </encoder>
+    </appender>
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_DIR}sys.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>
+                ${LOG_DIR}sys.log.%d{yyyyMMdd}
+            </FileNamePattern>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%date %X{traceId} %level %logger %msg%n</Pattern>
+        </encoder>
+    </appender>
+    <logger name="javax.net" level="error"/>
+    <logger name="javax.management" level="error"/>
+    <logger name="org.springframework" level="error"/>
+
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="ROLLING"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

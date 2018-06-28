@@ -29,8 +29,8 @@ public class MyShiroRealm extends AuthorizingRealm {
         UserInfoEntity userInfoEntity = (UserInfoEntity)principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //获取功能列表
-        List<String> permissionNames = userInfoService.findFuncActionByUserId(userInfoEntity.getUserAccount());
-        Set set = new HashSet(Arrays.asList(permissionNames));
+        List<String> permissionNames = userInfoService.findFuncActionByUserId(userInfoEntity.getId());
+        Set set = new HashSet(permissionNames);
         authorizationInfo.setStringPermissions(set);
         return authorizationInfo;
     }
