@@ -30,6 +30,12 @@ public class SqlHelper {
 
     public static final String DATABASE_TABLE = "dataBaseTable";
 
+    /**
+     * map 转成sql
+     *
+     * @param params
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static SqlParams mapToSql4Insert(Map<String, Object> params) {
         SqlParams sqlParams = new SqlParams();
@@ -71,7 +77,7 @@ public class SqlHelper {
 
     /**
      * @param pageParam
-     * @param baseSql   exception select * from generailze_acticle where 1=1
+     * @param baseSql   example: select * from generailze_acticle where 1=1
      * @return
      */
     public static SqlParams mapToSql4SelectPage(PageParam pageParam,

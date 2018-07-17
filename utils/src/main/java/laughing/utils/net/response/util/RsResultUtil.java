@@ -20,7 +20,7 @@ public class RsResultUtil {
      */
     public static boolean isSuccess(String jsonStr) {
         JSONObject jsonObject = JSON.parseObject(jsonStr);
-        String code = jsonObject.getString("resultCode");
+        String code = jsonObject.getString("code");
         if (code.equals(ErrorEnum.SUCCESS.getErrorCode())) {
             return true;
         }

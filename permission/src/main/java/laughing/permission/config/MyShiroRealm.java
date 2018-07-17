@@ -9,7 +9,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +28,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         UserInfoEntity userInfoEntity = (UserInfoEntity)principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //获取功能列表
-        List<String> permissionNames = userInfoService.findFuncActionByUserId(userInfoEntity.getId());
+        List<String> permissionNames = userInfoService.findFuncActionByUserId(String.valueOf(userInfoEntity.getId()));
         Set set = new HashSet(permissionNames);
         authorizationInfo.setStringPermissions(set);
         return authorizationInfo;

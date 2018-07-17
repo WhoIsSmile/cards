@@ -42,16 +42,33 @@ public class MenuDao {
         return result;
     }
 
+
+
+    /**
+     * 根据menuId 查询
+     *
+     * @param menuId
+     * @return
+     */
+    public MenuEntity findMenuByMenuId(String menuId) {
+        String sql = "select * from sys_menu where id=?";
+        List<Object> params = new ArrayList<>(1);
+        params.add(menuId);
+        return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(
+                MenuEntity.class));
+    }
+
     /**
      * 查询菜单(列表使用)
      *
      * @param pageParam
      * @return
      */
-    public ResultPage findRoleList(PageParam pageParam) {
+    public ResultPage findMenuList(PageParam pageParam) {
         ResultPage<Menu> resultPage;
         String baseSql = "select *  from sys_menu where  1=1 ";
         resultPage = SqlHelper.findDataByPage(jdbcTemplate, pageParam, baseSql, Menu.class);
         return resultPage;
     }
+
 }

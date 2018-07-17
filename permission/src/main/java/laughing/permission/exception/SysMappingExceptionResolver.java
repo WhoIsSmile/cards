@@ -12,7 +12,7 @@ import org.apache.shiro.authz.AuthorizationException;
  **/
 public class SysMappingExceptionResolver extends LaughingMappingExceptionResolver {
     @Override
-    public RsResult dowithException(Exception e) {
+    public RsResult doWithException(Exception e) {
         if (AuthorizationException.class.isAssignableFrom(e.getClass())) {
             return new RsResult(ErrorEnum.UNAUTH);
         }

@@ -49,7 +49,7 @@ public abstract class LaughingMappingExceptionResolver extends SimpleMappingExce
             LaughingException exception = (LaughingException) ex;
             result = new RsResult(exception.getErrorEnum());
         } else {
-            result = dowithException(ex);
+            result = doWithException(ex);
             if (result == null) {
                 log.error("error:{}", ex.getCause());
                 result = new RsResult(ErrorEnum.SYSTEM_ERROR);
@@ -64,6 +64,12 @@ public abstract class LaughingMappingExceptionResolver extends SimpleMappingExce
         return mv;
     }
 
+    /**
+     * 判断是否是ajax
+     *
+     * @param request
+     * @return
+     */
     private boolean isAjax(HttpServletRequest request) {
         return !request.getHeader("accept").contains(MediaType.TEXT_HTML_VALUE);
     }
@@ -75,5 +81,5 @@ public abstract class LaughingMappingExceptionResolver extends SimpleMappingExce
      * @param e
      * @return
      */
-    public abstract RsResult dowithException(Exception e);
+    public abstract RsResult doWithException(Exception e);
 }

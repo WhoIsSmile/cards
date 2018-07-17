@@ -1,5 +1,6 @@
 package laughing.permission.service;
 
+import laughing.permission.dto.UserMenuDTO;
 import laughing.permission.entity.RoleEntity;
 import laughing.permission.entity.UserInfoEntity;
 
@@ -34,5 +35,13 @@ public interface UserInfoService {
      * @param userId
      * @return
      */
-    public List<String> findFuncActionByUserId(int userId);
+    public List<String> findFuncActionByUserId(String userId);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    public List<UserMenuDTO> findUserMenuList(String userId);
+
 }

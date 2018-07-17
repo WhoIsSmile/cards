@@ -34,11 +34,18 @@ public class RoleMenuFuncRelDao {
         return result;
     }
 
-    public List<String> findFuncActionByUserId(int userId){
+    /**
+     * 根据用户Id 查询 所有功能
+     * userId——>roleId——>menuId——>fun
+     *
+     * @param userId
+     * @return
+     */
+    public List<String> findFuncActionByUserId(String userId) {
         String sql = "select DISTINCT (menuFunc.funcAction) from sys_user_role userRole ,sys_role_menu_func menuFunc where userRole.userId=? and userRole.roleId=menuFunc.roleId";
         List<Object> params = new ArrayList<>(1);
         params.add(userId);
-        List<String> result = jdbcTemplate.queryForList(sql, params.toArray(),String.class);
+        List<String> result = jdbcTemplate.queryForList(sql, params.toArray(), String.class);
         return result;
     }
 
