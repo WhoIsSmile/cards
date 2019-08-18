@@ -26,17 +26,28 @@ import java.util.Map;
 @RestController
 @Slf4j
 public class SysController {
+    /**
+     * 登录过期
+     *
+     * @return
+     */
     @RequestMapping(value = "/unAuth")
     public Object unAuth() {
         log.info("--登录过期--");
         return new RsResult(ErrorEnum.LOGIN_EXPIRE);
     }
 
+    /**
+     * ajax 登录
+     *
+     * @param userInfoParams
+     * @return
+     */
     @RequestMapping(value = "/login")
     @ApiOperation(value = "login用户登录", notes = "用户名，密码")
     @ApiImplicitParams(
             {@ApiImplicitParam(name = "userName", value = "账户", required = true, dataType = "STRING", paramType = "query"),
-             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "STRING", paramType = "query")})
+                    @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "STRING", paramType = "query")})
     public Object ajaxLogin(UserInfoParams userInfoParams) {
         Map<String, String> map = new HashMap<>(2);
         Subject subject = SecurityUtils.getSubject();
@@ -44,6 +55,7 @@ public class SysController {
         subject.login(token);
         return new RsResult(ErrorEnum.SUCCESS);
     }
+
     @RequestMapping(value = "/403")
     public Object forbit() {
         log.info("--登录过期--");

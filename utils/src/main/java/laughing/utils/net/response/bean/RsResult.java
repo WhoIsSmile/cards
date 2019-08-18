@@ -12,21 +12,21 @@ import lombok.Data;
 @Data
 public class RsResult<T> {
     private String code = ErrorEnum.SUCCESS.getErrorCode();
-    private String msg = ErrorEnum.SUCCESS.getErrorMsg();
-    private T resultBody;
+    private String message = ErrorEnum.SUCCESS.getErrorMsg();
+    private T body;
 
     public RsResult() {
     }
 
     public RsResult(ErrorEnum errorEnum) {
         this.code = errorEnum.getErrorCode();
-        this.msg = errorEnum.getErrorMsg();
+        this.message = errorEnum.getErrorMsg();
     }
 
     public RsResult(ErrorEnum errorEnum, T body) {
         this.code = errorEnum.getErrorCode();
-        this.msg = errorEnum.getErrorMsg();
-        resultBody = body;
+        this.message = errorEnum.getErrorMsg();
+        this.body = body;
     }
 
 }

@@ -1,9 +1,9 @@
-package laughing.permission.dao;
+package laughing.my.dao;
 
-import laughing.permission.dao.bean.PageParam;
-import laughing.permission.dao.bean.ResultPage;
-import laughing.permission.dao.util.SqlHelper;
-import laughing.permission.entity.MenuEntity;
+import laughing.my.dao.bean.PageParam;
+import laughing.my.dao.bean.ResultPage;
+import laughing.my.dao.util.SqlHelper;
+import laughing.my.entity.MenuEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
