@@ -12,12 +12,9 @@ import java.util.List;
  * @desc 父节点和子节点的关系的DTO
  **/
 @Data
-public class UserMenuDTO {
+public class UserMenuDTO extends MenuEntity{
 
-    /**
-     * 父节点
-     */
-    private MenuEntity parentMenu;
+
     /**
      * 子节点
      */

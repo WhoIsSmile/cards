@@ -1,4 +1,4 @@
-package laughing.my.conntroller.dto;
+package laughing.my.controller.dto;
 
 import lombok.Data;
 

@@ -1,11 +1,9 @@
-package laughing.my.conntroller;
+package laughing.my.controller;
 
-import laughing.my.conntroller.dto.UserInfoParams;
+import laughing.my.controller.dto.UserInfoParams;
 import laughing.my.entity.UserInfoEntity;
 import laughing.my.service.UserInfoService;
 import laughing.my.service.dto.MenuRouter;
-import laughing.my.service.dto.UserMenuDTO;
-import laughing.my.utils.encrypt.RSAUtils;
 import laughing.utils.global.ErrorEnum;
 import laughing.utils.net.response.bean.RsResult;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author laughing

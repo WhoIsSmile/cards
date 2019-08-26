@@ -4,11 +4,14 @@ package laughing.my.dao.util;
 import laughing.my.dao.bean.PageParam;
 import laughing.my.dao.bean.ResultPage;
 import laughing.my.dao.bean.SqlParams;
+import laughing.my.entity.MenuEntity;
 import laughing.my.exception.LaughingSqlException;
 import laughing.my.utils.StringTool;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 
@@ -24,7 +27,10 @@ public class SqlHelper {
      */
     public static final String SQL_INSERT_TEMPLATE = "INSERT INTO {table} ({columns}) values({params})";
 
+    public static final String SQL_UPDTATE_BYID_TEMPLATE = "UPDATE {table} set {conditions} where id=?";
     public static final String DATABASE_TABLE = "dataBaseTable";
+
+    public static final String DATABASE_TABLE_ID = "id";
 
     /**
      * map 转成sql
@@ -98,6 +104,47 @@ public class SqlHelper {
         return sqlParams;
     }
 
+
+    public static SqlParams mapToUpdateById(Map<String, Object> params) {
+        SqlParams sqlParams = new SqlParams();
+        List<Object> paramList = new ArrayList<Object>();
+        String table = params.get(DATABASE_TABLE).toString();
+        if (table == null || table.equals("")) {
+            throw new LaughingSqlException(
+                    "map hasn't dataBaseTable key ;this is table name");
+        }
+        params.remove(DATABASE_TABLE);
+        Object id = params.get(DATABASE_TABLE_ID).toString();
+        if (id == null) {
+            throw new LaughingSqlException(
+                    "map hasn't dataBaseTable  key ;this is row id");
+        }
+        params.remove(DATABASE_TABLE_ID);
+        Iterator iter = params.entrySet().iterator();
+        StringBuilder condition = new StringBuilder();
+//        StringBuilder paramMarkBuilder = new StringBuilder();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = entry.getKey().toString();
+            Object val = entry.getValue();
+            condition.append(key).append("=").append("?").append(",");
+            paramList.add(val);
+        }
+        String column = condition.toString();
+        if (column.length() > 1) {
+            column = column.substring(0, column.length() - 1);
+        } else {
+            throw new LaughingSqlException("column is null");
+        }
+
+        String sql = StringTool.replace(SQL_INSERT_TEMPLATE, "{table}", table);
+        sql = StringTool.replace(sql, "{conditions}", column);
+        paramList.add(id);
+        sqlParams.setSql(sql);
+        sqlParams.setParams(paramList.toArray());
+        return sqlParams;
+    }
+
     public static SqlParams mapToSql4SelectCount(PageParam pageParam,
                                                  String baseSql) {
         SqlParams sqlParams = new SqlParams();
@@ -130,6 +177,38 @@ public class SqlHelper {
 
     }
 
+//    public static objectToInsertSql(Class clazz){
+//        EntityTableRowMapper entityTableRowMapper = EntityTableRowMapper.toEntityTableRowMapper(clazz);
+//
+//        Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
+//       List insertColumns = new ArrayList(columnFieldMapper.size());
+//        for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
+//            Field field = stringFieldEntry.getValue();
+//            Object value = EntityUtils.getValue(entity, field);
+//            if (value == null) {
+//                continue;
+//            }
+//            insertColumns.add(stringFieldEntry.getKey());
+//            insertColumnValues.add(value);
+//        }
+//
+//        StringBuilder builder = new StringBuilder();
+//        int size = insertColumns.size();
+//        builder.append("INSERT INTO ").append(getTableName()).append(StringUtils.SPACE);
+//        builder.append(StringUtils.append("( ", StringUtils.join(insertColumns, ", "), " ) "));
+//        builder.append("VALUES ");
+//        for (int i = 0; i < insertCount; i++) {
+//            builder.append("( ");
+//            String[] repeat = StringUtils.repeat("?", size);
+//            builder.append(StringUtils.join(Arrays.asList(repeat), ", "));
+//            builder.append(" )");
+//            if (i != insertCount - 1) {
+//                builder.append(StringUtils.COMMA);
+//            }
+//        }
+//        builder.append(";");
+//
+//    }
     public static void main(String[] args) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(DATABASE_TABLE, "asa");

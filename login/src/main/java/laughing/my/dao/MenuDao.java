@@ -63,11 +63,26 @@ public class MenuDao {
      * @param pageParam
      * @return
      */
-    public ResultPage findMenuList(PageParam pageParam) {
+    public ResultPage findMenuListByPage(PageParam pageParam) {
         ResultPage<Menu> resultPage;
         String baseSql = "select *  from sys_menu where  1=1 ";
         resultPage = SqlHelper.findDataByPage(jdbcTemplate, pageParam, baseSql, Menu.class);
         return resultPage;
     }
 
+
+    /**
+     * 查询所有菜单
+     *
+     * @return
+     */
+    public List<MenuEntity> findMenuList() {
+        String sql = "select * from sys_menu  order by parentMenuId , orderNo";
+        return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(
+                MenuEntity.class));
+    }
+
+    public void edit(MenuEntity menuEntity){
+
+    }
 }

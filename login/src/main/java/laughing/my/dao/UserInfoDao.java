@@ -1,7 +1,6 @@
 package laughing.my.dao;
 
 
-import laughing.my.dao.util.SqlHelper;
 import laughing.my.entity.UserInfoEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

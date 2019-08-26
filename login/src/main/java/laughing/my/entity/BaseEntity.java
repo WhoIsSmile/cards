@@ -2,6 +2,7 @@ package laughing.my.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 /**
@@ -14,14 +15,17 @@ public class BaseEntity {
     /**
      * id 主键
      */
-    private int id;
+    @Column(name="id")
+    private Integer id;
  
     /**
      * 创建时间
      */
+    @Column(name="createTime")
     private Date createTime;
     /**
      * 更新时间
      */
+    @Column(name="updateTime")
     private Date updateTime;
 }
