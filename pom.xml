@@ -7,7 +7,7 @@
     <artifactId>cards</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
-        <module>login-server</module>
+        <!--<module>login-server</module>-->
         <module>work</module>
         <module>web</module>
         <module>utils</module>

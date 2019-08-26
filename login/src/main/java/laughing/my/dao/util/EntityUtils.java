@@ -47,7 +47,7 @@ public class EntityUtils {
         String value = null;
         try {
             // 通过属性获取对象的属性
-//            Field field = obj.getClass().getDeclaredField(propName);
+            //Field field = obj.getClass().getDeclaredField(propName);
             // 对象的属性的访问权限设置为可访问
             field.setAccessible(true);
             // 获取属性的对应的值
