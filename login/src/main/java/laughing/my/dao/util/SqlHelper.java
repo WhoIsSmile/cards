@@ -177,42 +177,57 @@ public class SqlHelper {
 
     }
 
-//    public static objectToInsertSql(Class clazz){
-//        EntityTableRowMapper entityTableRowMapper = EntityTableRowMapper.toEntityTableRowMapper(clazz);
-//
-//        Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
-//       List insertColumns = new ArrayList(columnFieldMapper.size());
-//        for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
-//            Field field = stringFieldEntry.getValue();
-//            Object value = EntityUtils.getValue(entity, field);
-//            if (value == null) {
-//                continue;
-//            }
-//            insertColumns.add(stringFieldEntry.getKey());
-//            insertColumnValues.add(value);
-//        }
-//
-//        StringBuilder builder = new StringBuilder();
-//        int size = insertColumns.size();
-//        builder.append("INSERT INTO ").append(getTableName()).append(StringUtils.SPACE);
-//        builder.append(StringUtils.append("( ", StringUtils.join(insertColumns, ", "), " ) "));
-//        builder.append("VALUES ");
-//        for (int i = 0; i < insertCount; i++) {
-//            builder.append("( ");
-//            String[] repeat = StringUtils.repeat("?", size);
-//            builder.append(StringUtils.join(Arrays.asList(repeat), ", "));
-//            builder.append(" )");
-//            if (i != insertCount - 1) {
-//                builder.append(StringUtils.COMMA);
-//            }
-//        }
-//        builder.append(";");
-//
-//    }
+    /**
+     * @param obj
+     * @return
+     */
+    public static SqlParams entityToInsertSql(Object obj) {
+        SqlParams sqlParams = new SqlParams();
+        EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(obj.getClass());
+        Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
+        List<Object> insertColumnValues = new ArrayList();
+        List insertColumns = new ArrayList(columnFieldMapper.size());
+        for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
+            Field field = stringFieldEntry.getValue();
+            Object value = EntityUtils.getValue(obj, field);
+            if (value == null) {
+                continue;
+            }
+            insertColumns.add(stringFieldEntry.getKey());
+            insertColumnValues.add(value);
+        }
+        StringBuilder builder = new StringBuilder();
+        int size = insertColumns.size();
+        builder.append("INSERT INTO ").append(entityTableRowMapper.getTableName()).append(StringUtils.SPACE);
+        builder.append("( ").append(StringUtils.join(insertColumns, ", ")).append(" ) ");
+        builder.append(" VALUES (");
+        for (int i = 0; i < size; i++) {
+            builder.append("? ");
+            if (i != size - 1) {
+                builder.append(",");
+            } else {
+                builder.append(")");
+            }
+        }
+        builder.append(";");
+        sqlParams.setSql(builder.toString());
+        sqlParams.setParams(insertColumnValues.toArray());
+        return sqlParams;
+    }
+
     public static void main(String[] args) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(DATABASE_TABLE, "asa");
         params.put("sasa", "aaaa");
-        System.out.println(SqlHelper.mapToSql4Insert(params).getSql());
+        MenuEntity menuEntity = new MenuEntity();
+        menuEntity.setComponent("aaa");
+        menuEntity.setIcon("bbb");
+        menuEntity.setOrderNo(1);
+        for (int i=0;i<100;i++){
+            SqlParams params1 = entityToInsertSql(menuEntity);
+            System.out.println(params1.getSql());
+        }
+
+//        System.out.println(SqlHelper.mapToSql4Insert(params).getSql());
     }
 }

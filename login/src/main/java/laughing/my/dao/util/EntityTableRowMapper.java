@@ -59,6 +59,10 @@ public class EntityTableRowMapper {
 
     public static EntityTableRowMapper toEntityTableRowMapper(Class clazz) {
         Class clz = clazz;
+        String tableName = EntityUtils.getTableName(clz);
+        if (tableName == null) {
+            return null;
+        }
         EntityTableRowMapper entityTableRowMapper = new EntityTableRowMapper();
         Map<String, Field> columnFieldMap = EntityUtils.columnFieldMap(clz);
         Map<String, Field> superColumnFieldMap = EntityUtils.columnFieldMap(clz.getSuperclass());

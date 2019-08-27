@@ -39,19 +39,22 @@ public class EntityUtils {
 
     public static String getTableName(Class<?> clazz) {
         Table annotation = clazz.getAnnotation(Table.class);
+        if (annotation == null) {
+            return null;
+        }
         String name = annotation.name();
         return name;
     }
 
-    public String getFieldVal(Object obj, Field field) {
-        String value = null;
+    public static Object getValue(Object obj, Field field) {
+        Object value = null;
         try {
             // 通过属性获取对象的属性
             //Field field = obj.getClass().getDeclaredField(propName);
             // 对象的属性的访问权限设置为可访问
             field.setAccessible(true);
             // 获取属性的对应的值
-            value = field.get(obj).toString();
+            value = field.get(obj);
         } catch (Exception e) {
             log.error("getFieldVal error : {}", e);
         }
