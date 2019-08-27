@@ -3,6 +3,7 @@ package laughing.my.dao.util;
 
 import laughing.my.dao.bean.PageParam;
 import laughing.my.dao.bean.ResultPage;
+import laughing.my.dao.bean.SelectConditions;
 import laughing.my.dao.bean.SqlParams;
 import laughing.my.entity.MenuEntity;
 import laughing.my.exception.LaughingSqlException;
@@ -27,7 +28,12 @@ public class SqlHelper {
      */
     public static final String SQL_INSERT_TEMPLATE = "INSERT INTO {table} ({columns}) values({params})";
 
-    public static final String SQL_UPDTATE_BYID_TEMPLATE = "UPDATE {table} set {conditions} where id=?";
+    public static final String SQL_UPDTATE_BY_ID_TEMPLATE = "UPDATE {table} set {conditions} where id=?";
+
+    public static final String SELECT_COUNT_TEMPLATE = "select count(*) from {table} where 1=1 ";
+    public static final String SELECT_PAGE_TEMPLATE = "select * from {table} where 1=1 ";
+
+
     public static final String DATABASE_TABLE = "dataBaseTable";
 
     public static final String DATABASE_TABLE_ID = "id";
@@ -42,8 +48,8 @@ public class SqlHelper {
     public static SqlParams mapToSql4Insert(Map<String, Object> params) {
         SqlParams sqlParams = new SqlParams();
         List<Object> paramList = new ArrayList<Object>();
-        String table = params.get(DATABASE_TABLE).toString();
-        if (table == null || table.equals("")) {
+        Object table = params.get(DATABASE_TABLE);
+        if (table == null || table.toString().equals("")) {
             throw new LaughingSqlException(
                     "map hasn't dataBaseTable key ;this is table name");
         }
@@ -69,7 +75,7 @@ public class SqlHelper {
         if (paramMark.length() > 1) {
             paramMark = paramMark.substring(0, paramMark.length() - 1);
         }
-        String sql = StringTool.replace(SQL_INSERT_TEMPLATE, "{table}", table);
+        String sql = StringTool.replace(SQL_INSERT_TEMPLATE, "{table}", table.toString());
         sql = StringTool.replace(sql, "{columns}", column);
         sql = StringTool.replace(sql, "{params}", paramMark);
         sqlParams.setSql(sql);
@@ -79,15 +85,17 @@ public class SqlHelper {
 
     /**
      * @param pageParam
-     * @param baseSql   example: select * from generailze_acticle where 1=1
+     * @param tableName example: generailze_acticle
      * @return
      */
     public static SqlParams mapToSql4SelectPage(PageParam pageParam,
-                                                String baseSql) {
+                                                String tableName) {
         SqlParams sqlParams = new SqlParams();
+        SelectConditions selectConditions = mapToSelectConditions(pageParam.getParams());
+        String baseSql = SELECT_PAGE_TEMPLATE.replace("{table}", tableName);
         long currentPage = pageParam.getCurrentPage();
         int pageSize = pageParam.getPageSize();
-        List<Object> paramList = new ArrayList<Object>();
+        List<Object> paramList = selectConditions.getParams();
         StringBuilder limitBuilder = new StringBuilder();
         StringBuilder orderByBuilder = new StringBuilder(" ORDER BY ").append(pageParam.getOrderBy()).append(" ");
         if (pageParam.isAsc()) {
@@ -98,18 +106,39 @@ public class SqlHelper {
         limitBuilder.append(" limit ?,? ");
         paramList.add((currentPage - 1) * pageSize);
         paramList.add(pageSize);
-        StringBuilder sql = new StringBuilder().append(baseSql).append(orderByBuilder.toString()).append(limitBuilder.toString());
+        StringBuilder sql = new StringBuilder(baseSql);
+        sql.append(selectConditions);
+        sql.append(orderByBuilder.toString()).append(limitBuilder.toString());
         sqlParams.setSql(sql.toString());
         sqlParams.setParams(paramList.toArray());
         return sqlParams;
     }
 
 
+    private static SelectConditions mapToSelectConditions(Map<String, Object> params) {
+        SelectConditions conditions = new SelectConditions();
+        List<Object> paramVal = new ArrayList<>();
+        StringBuffer conditionBuffer = new StringBuffer();
+        if (params != null) {
+            Iterator iter = params.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                String key = entry.getKey().toString();
+                Object val = entry.getValue();
+                conditionBuffer.append(" and ").append(key).append("=").append("?");
+                paramVal.add(val);
+            }
+        }
+        conditions.setCondition(conditionBuffer.toString());
+        conditions.setParams(paramVal);
+        return conditions;
+    }
+
     public static SqlParams mapToUpdateById(Map<String, Object> params) {
         SqlParams sqlParams = new SqlParams();
         List<Object> paramList = new ArrayList<Object>();
-        String table = params.get(DATABASE_TABLE).toString();
-        if (table == null || table.equals("")) {
+        Object table = params.get(DATABASE_TABLE);
+        if (table == null || table.toString().equals("")) {
             throw new LaughingSqlException(
                     "map hasn't dataBaseTable key ;this is table name");
         }
@@ -137,7 +166,7 @@ public class SqlHelper {
             throw new LaughingSqlException("column is null");
         }
 
-        String sql = StringTool.replace(SQL_INSERT_TEMPLATE, "{table}", table);
+        String sql = StringTool.replace(SQL_UPDTATE_BY_ID_TEMPLATE, "{table}", table.toString());
         sql = StringTool.replace(sql, "{conditions}", column);
         paramList.add(id);
         sqlParams.setSql(sql);
@@ -146,10 +175,13 @@ public class SqlHelper {
     }
 
     public static SqlParams mapToSql4SelectCount(PageParam pageParam,
-                                                 String baseSql) {
+                                                 String tabelName) {
         SqlParams sqlParams = new SqlParams();
-        List<Object> paramList = new ArrayList<Object>();
-        StringBuilder sql = new StringBuilder().append(baseSql);
+        String baseSql = SELECT_COUNT_TEMPLATE.replace("{table}", tabelName);
+        SelectConditions selectConditions = mapToSelectConditions(pageParam.getParams());
+        List<Object> paramList = selectConditions.getParams();
+
+        StringBuilder sql = new StringBuilder().append(baseSql).append(selectConditions);
         sqlParams.setSql(sql.toString());
         sqlParams.setParams(paramList.toArray());
         return sqlParams;
@@ -209,7 +241,6 @@ public class SqlHelper {
      * @return
      */
     public static SqlParams entityToUpdateSqlById(Object obj) {
-//        SqlParams sqlParams = new SqlParams();
         EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(obj.getClass());
         Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
         Map<String, Object> columnValues = getEntityColumnValues(columnFieldMapper, obj);
@@ -239,8 +270,9 @@ public class SqlHelper {
         menuEntity.setComponent("aaa");
         menuEntity.setIcon("bbb");
         menuEntity.setOrderNo(1);
+        menuEntity.setId(1);
         for (int i = 0; i < 100; i++) {
-            SqlParams params1 = entityToInsertSql(menuEntity);
+            SqlParams params1 = entityToUpdateSqlById(menuEntity);
             System.out.println(params1.getSql());
         }
 

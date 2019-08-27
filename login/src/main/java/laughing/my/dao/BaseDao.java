@@ -2,8 +2,7 @@ package laughing.my.dao;
 
 import laughing.my.dao.bean.SqlParams;
 import laughing.my.dao.util.SqlHelper;
-import laughing.my.entity.BaseEntity;
-import laughing.my.entity.MenuEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,21 +20,49 @@ public class BaseDao {
 
     /**
      * 编辑
+     * <p>如果字段想置空 ，字段必须是“”字符串，而不是null，不然不介意使用这个方法<p/>
      *
      * @param entity
      */
-    public void edit(Object entity) {
+    public int edit(Object entity) {
         SqlParams params = SqlHelper.entityToEditSql(entity);
-        jdbcTemplate.update(params.getSql(), params.getParams());
+        return jdbcTemplate.update(params.getSql(), params.getParams());
     }
 
-    public void save(Object entity) {
+    /**
+     * 保存数据
+     * <p>如果字段想置空 ，字段必须是“”字符串，而不是null，不然不介意使用这个方法<p/>
+     *
+     * @param entity
+     * @return
+     */
+    public int save(Object entity) {
         SqlParams params = SqlHelper.entityToInsertSql(entity);
-        jdbcTemplate.update(params.getSql(), params.getParams());
+        return jdbcTemplate.update(params.getSql(), params.getParams());
     }
 
-    public void updateById(Object entity) {
+    /**
+     * 通过Id 更新
+     * <p>如果字段想置空 ，字段必须是“”字符串，而不是null，不然不介意使用这个方法<p/>
+     *
+     * @param entity
+     * @return
+     * @description 如果字段想置空 ，字段必须是“”字符串，而不是null，不然不介意使用这个方法
+     */
+    public int updateById(Object entity) {
         SqlParams params = SqlHelper.entityToUpdateSqlById(entity);
-        jdbcTemplate.update(params.getSql(), params.getParams());
+        return jdbcTemplate.update(params.getSql(), params.getParams());
+    }
+
+    /**
+     * 通过Id删除
+     *
+     * @param id
+     * @param tableName
+     * @return
+     */
+    public int deleteById(long id, String tableName) {
+        StringBuffer sql = new StringBuffer("delete from ").append(tableName).append(" where id=?");
+        return jdbcTemplate.update(sql.toString(), new Object[]{id});
     }
 }

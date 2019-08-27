@@ -8,7 +8,7 @@ public class ResultPage<T> {
 	private long currentPage = 1;
 
 	private long totalNum;
-	private long tatalPage;
+	private long totalPage;
 
 	List<T> result;
 
@@ -34,16 +34,16 @@ public class ResultPage<T> {
 
 	public void setTotalNum(long totalNum) {
 		this.totalNum = totalNum;
-		setTatalPage(totalNum % pageSize == 0 ? totalNum / pageSize : (totalNum
+		setTotalPage(totalNum % pageSize == 0 ? totalNum / pageSize : (totalNum
 				/ pageSize + 1));
 	}
 
-	public long getTatalPage() {
-		return tatalPage;
+	public long getTotalPage() {
+		return totalPage;
 	}
 
-	public void setTatalPage(long tatalPage) {
-		this.tatalPage = tatalPage;
+	public void setTotalPage(long totalPage) {
+		this.totalPage = totalPage;
 	}
 
 
