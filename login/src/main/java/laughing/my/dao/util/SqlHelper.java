@@ -178,41 +178,57 @@ public class SqlHelper {
     }
 
     /**
+     * entity 转化成sql
+     *
      * @param obj
      * @return
      */
     public static SqlParams entityToInsertSql(Object obj) {
-        SqlParams sqlParams = new SqlParams();
         EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(obj.getClass());
         Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
-        List<Object> insertColumnValues = new ArrayList();
-        List insertColumns = new ArrayList(columnFieldMapper.size());
+        Map<String, Object> columnValues = getEntityColumnValues(columnFieldMapper, obj);
+        columnValues.put(DATABASE_TABLE, entityTableRowMapper.getTableName());
+        return mapToSql4Insert(columnValues);
+    }
+
+    public static SqlParams entityToEditSql(Object entity) {
+        EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(entity.getClass());
+        Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
+        Map<String, Object> columnValues = getEntityColumnValues(columnFieldMapper, entity);
+        columnValues.put(DATABASE_TABLE, entityTableRowMapper.getTableName());
+        Object id = columnValues.get(DATABASE_TABLE_ID);
+        if (id == null) {
+            return mapToSql4Insert(columnValues);
+        } else {
+            return mapToUpdateById(columnValues);
+        }
+    }
+
+    /**
+     * @param obj
+     * @return
+     */
+    public static SqlParams entityToUpdateSqlById(Object obj) {
+//        SqlParams sqlParams = new SqlParams();
+        EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(obj.getClass());
+        Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
+        Map<String, Object> columnValues = getEntityColumnValues(columnFieldMapper, obj);
+        columnValues.put(DATABASE_TABLE, entityTableRowMapper.getTableName());
+        return mapToUpdateById(columnValues);
+    }
+
+
+    public static Map<String, Object> getEntityColumnValues(Map<String, Field> columnFieldMapper, Object obj) {
+        Map<String, Object> columnMap = new HashMap<>();
         for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
             Field field = stringFieldEntry.getValue();
             Object value = EntityUtils.getValue(obj, field);
             if (value == null) {
                 continue;
             }
-            insertColumns.add(stringFieldEntry.getKey());
-            insertColumnValues.add(value);
+            columnMap.put(stringFieldEntry.getKey(), value);
         }
-        StringBuilder builder = new StringBuilder();
-        int size = insertColumns.size();
-        builder.append("INSERT INTO ").append(entityTableRowMapper.getTableName()).append(StringUtils.SPACE);
-        builder.append("( ").append(StringUtils.join(insertColumns, ", ")).append(" ) ");
-        builder.append(" VALUES (");
-        for (int i = 0; i < size; i++) {
-            builder.append("? ");
-            if (i != size - 1) {
-                builder.append(",");
-            } else {
-                builder.append(")");
-            }
-        }
-        builder.append(";");
-        sqlParams.setSql(builder.toString());
-        sqlParams.setParams(insertColumnValues.toArray());
-        return sqlParams;
+        return columnMap;
     }
 
     public static void main(String[] args) {
@@ -223,7 +239,7 @@ public class SqlHelper {
         menuEntity.setComponent("aaa");
         menuEntity.setIcon("bbb");
         menuEntity.setOrderNo(1);
-        for (int i=0;i<100;i++){
+        for (int i = 0; i < 100; i++) {
             SqlParams params1 = entityToInsertSql(menuEntity);
             System.out.println(params1.getSql());
         }

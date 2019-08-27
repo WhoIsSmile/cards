@@ -18,7 +18,7 @@ import java.util.List;
  **/
 @Repository
 @Slf4j
-public class UserInfoDao {
+public class UserInfoDao extends BaseDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -48,7 +48,6 @@ public class UserInfoDao {
     }
 
     /**
-     *
      * @param token
      * @return
      */

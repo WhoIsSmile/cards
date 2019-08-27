@@ -2,7 +2,9 @@ package laughing.my.dao;
 
 import laughing.my.dao.bean.PageParam;
 import laughing.my.dao.bean.ResultPage;
+import laughing.my.dao.bean.SqlParams;
 import laughing.my.dao.util.SqlHelper;
+import laughing.my.entity.BaseEntity;
 import laughing.my.entity.MenuEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -19,7 +21,7 @@ import java.util.List;
  * @desc 菜单
  **/
 @Repository
-public class MenuDao {
+public class MenuDao extends BaseDao{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -82,7 +84,13 @@ public class MenuDao {
                 MenuEntity.class));
     }
 
-    public void edit(MenuEntity menuEntity){
-
+    public void edit(MenuEntity menuEntity) {
+        SqlParams params;
+        if (menuEntity.getId() == null) {
+            params = SqlHelper.entityToInsertSql(menuEntity);
+        } else {
+            params = SqlHelper.entityToUpdateSqlById(menuEntity);
+        }
+        jdbcTemplate.update(params.getSql(), params.getParams());
     }
 }

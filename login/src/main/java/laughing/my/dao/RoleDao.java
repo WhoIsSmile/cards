@@ -20,7 +20,7 @@ import java.util.List;
  * @desc 系统角色Dao
  **/
 @Repository
-public class RoleDao {
+public class RoleDao  extends  BaseDao{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

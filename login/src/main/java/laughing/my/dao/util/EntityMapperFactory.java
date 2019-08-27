@@ -44,13 +44,15 @@ public class EntityMapperFactory {
     static void init(String packageName) {
         List<Class> clazzList = ScanEntityPackage.getClasses(packageName);
         if (clazzList != null) {
-            for (int i = 0; i < clazzList.size(); i++) {
-                EntityTableRowMapper mapper = EntityTableRowMapper.toEntityTableRowMapper(clazzList.get(i));
-                if (mapper != null) {
-                    entityMap.put(clazzList.get(i).getName(), mapper);
-                }
+            return;
+        }
+        for (int i = 0; i < clazzList.size(); i++) {
+            EntityTableRowMapper mapper = EntityTableRowMapper.toEntityTableRowMapper(clazzList.get(i));
+            if (mapper != null) {
+                entityMap.put(clazzList.get(i).getName(), mapper);
             }
         }
+
     }
 
     public static void main(String[] args) {

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * @desc 功能列表
  **/
 @Repository
-public class FunctionDao {
+public class FunctionDao extends  BaseDao{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

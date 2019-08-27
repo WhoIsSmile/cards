@@ -17,7 +17,7 @@ import java.util.List;
  * @desc
  **/
 @Repository
-public class RoleMenuFuncRelDao {
+public class RoleMenuFuncRelDao  extends  BaseDao{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
