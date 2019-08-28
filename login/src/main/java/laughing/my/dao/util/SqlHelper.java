@@ -133,6 +133,7 @@ public class SqlHelper {
 
     /**
      * map 转化为 查询条件
+     * <p>怎么解决like 的问题？扩展params参数？有没有更好办法？</p>
      *
      * @param params
      * @return
@@ -237,13 +238,14 @@ public class SqlHelper {
         SqlParams countSql = SqlHelper.mapToSql4SelectCount(pageParam, tableName);
         int totalSize = jdbcTemplate.queryForObject(countSql.getSql(), countSql.getParams(), Integer.class);
         resultPage.setTotalNum(totalSize);
+        List result = new ArrayList(pageParam.getPageSize());
         if (totalSize > 0) {
             SqlParams sqlParams = SqlHelper.mapToSql4SelectPage(pageParam, tableName);
-            List result = jdbcTemplate.query(sqlParams.getSql(), sqlParams
+            result = jdbcTemplate.query(sqlParams.getSql(), sqlParams
                     .getParams(), new BeanPropertyRowMapper<>(
                     clazz));
-            resultPage.setResult(result);
         }
+        resultPage.setResult(result);
         resultPage.setCurrentPage(pageParam.getCurrentPage());
         resultPage.setPageSize(pageParam.getPageSize());
         return resultPage;
@@ -263,6 +265,13 @@ public class SqlHelper {
         return mapToSql4Insert(columnValues);
     }
 
+    /**
+     * entity 转化成 entity sql
+     * <p>判断是否存在 id 如果有则是update 语句，没有则是 insert sql</p>
+     *
+     * @param entity
+     * @return
+     */
     public static SqlParams entityToSql4Edit(Object entity) {
         EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(entity.getClass());
         Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
@@ -277,6 +286,9 @@ public class SqlHelper {
     }
 
     /**
+     * entity 转化成 update sql
+     * <p>支持根据 id 更新<p/>
+     *
      * @param obj
      * @return
      */
