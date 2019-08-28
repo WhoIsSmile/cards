@@ -5,10 +5,9 @@ import laughing.my.dao.bean.PageParam;
 import laughing.my.dao.bean.ResultPage;
 import laughing.my.dao.bean.SelectConditions;
 import laughing.my.dao.bean.SqlParams;
-import laughing.my.entity.MenuEntity;
 import laughing.my.exception.LaughingSqlException;
 import laughing.my.utils.StringTool;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -21,6 +20,7 @@ import java.util.*;
  * @date 2016-3-2 下午08:50:11
  * @description sqlHelp
  */
+@Slf4j
 public class SqlHelper {
 
     /**
@@ -28,18 +28,34 @@ public class SqlHelper {
      */
     public static final String SQL_INSERT_TEMPLATE = "INSERT INTO {table} ({columns}) values({params})";
 
-    public static final String SQL_UPDTATE_BY_ID_TEMPLATE = "UPDATE {table} set {conditions} where id=?";
+    /**
+     * update 模版
+     */
+    public static final String SQL_UPDATE_BY_ID_TEMPLATE = "UPDATE {table} set {conditions} where id=?";
 
+    /**
+     * count 模版
+     */
     public static final String SELECT_COUNT_TEMPLATE = "select count(*) from {table} where 1=1 ";
+    /**
+     * select 模版
+     */
     public static final String SELECT_PAGE_TEMPLATE = "select * from {table} where 1=1 ";
 
 
+    /**
+     * table name
+     */
     public static final String DATABASE_TABLE = "dataBaseTable";
 
+    /**
+     * id
+     */
     public static final String DATABASE_TABLE_ID = "id";
 
     /**
-     * map 转成sql
+     * map 转成Insert sql
+     * <p> 其中必须有 dataBaseTable key 表示 table 名</p>
      *
      * @param params
      * @return
@@ -91,7 +107,7 @@ public class SqlHelper {
     public static SqlParams mapToSql4SelectPage(PageParam pageParam,
                                                 String tableName) {
         SqlParams sqlParams = new SqlParams();
-        SelectConditions selectConditions = mapToSelectConditions(pageParam.getParams());
+        SelectConditions selectConditions = mapToSql4SelectConditions(pageParam.getParams());
         String baseSql = SELECT_PAGE_TEMPLATE.replace("{table}", tableName);
         long currentPage = pageParam.getCurrentPage();
         int pageSize = pageParam.getPageSize();
@@ -107,7 +123,7 @@ public class SqlHelper {
         paramList.add((currentPage - 1) * pageSize);
         paramList.add(pageSize);
         StringBuilder sql = new StringBuilder(baseSql);
-        sql.append(selectConditions);
+        sql.append(selectConditions.getCondition());
         sql.append(orderByBuilder.toString()).append(limitBuilder.toString());
         sqlParams.setSql(sql.toString());
         sqlParams.setParams(paramList.toArray());
@@ -115,7 +131,13 @@ public class SqlHelper {
     }
 
 
-    private static SelectConditions mapToSelectConditions(Map<String, Object> params) {
+    /**
+     * map 转化为 查询条件
+     *
+     * @param params
+     * @return
+     */
+    private static SelectConditions mapToSql4SelectConditions(Map<String, Object> params) {
         SelectConditions conditions = new SelectConditions();
         List<Object> paramVal = new ArrayList<>();
         StringBuffer conditionBuffer = new StringBuffer();
@@ -134,6 +156,13 @@ public class SqlHelper {
         return conditions;
     }
 
+    /**
+     * 根据Id 更新数据
+     * <p> 其中必须有 dataBaseTable key 表示 table 名</p>
+     *
+     * @param params
+     * @return
+     */
     public static SqlParams mapToUpdateById(Map<String, Object> params) {
         SqlParams sqlParams = new SqlParams();
         List<Object> paramList = new ArrayList<Object>();
@@ -166,7 +195,7 @@ public class SqlHelper {
             throw new LaughingSqlException("column is null");
         }
 
-        String sql = StringTool.replace(SQL_UPDTATE_BY_ID_TEMPLATE, "{table}", table.toString());
+        String sql = StringTool.replace(SQL_UPDATE_BY_ID_TEMPLATE, "{table}", table.toString());
         sql = StringTool.replace(sql, "{conditions}", column);
         paramList.add(id);
         sqlParams.setSql(sql);
@@ -174,11 +203,18 @@ public class SqlHelper {
         return sqlParams;
     }
 
+    /**
+     * count  sql
+     *
+     * @param pageParam
+     * @param tableName
+     * @return
+     */
     public static SqlParams mapToSql4SelectCount(PageParam pageParam,
-                                                 String tabelName) {
+                                                 String tableName) {
         SqlParams sqlParams = new SqlParams();
-        String baseSql = SELECT_COUNT_TEMPLATE.replace("{table}", tabelName);
-        SelectConditions selectConditions = mapToSelectConditions(pageParam.getParams());
+        String baseSql = SELECT_COUNT_TEMPLATE.replace("{table}", tableName);
+        SelectConditions selectConditions = mapToSql4SelectConditions(pageParam.getParams());
         List<Object> paramList = selectConditions.getParams();
 
         StringBuilder sql = new StringBuilder().append(baseSql).append(selectConditions);
@@ -188,25 +224,29 @@ public class SqlHelper {
     }
 
     /**
-     * 带测试
+     * 分页查询
      *
      * @param jdbcTemplate
      * @param pageParam
-     * @param baseSql
+     * @param tableName
      * @param clazz
      * @return
      */
-    public static ResultPage findDataByPage(JdbcTemplate jdbcTemplate, PageParam pageParam, String baseSql, Class clazz) {
+    public static ResultPage findDataByPage(JdbcTemplate jdbcTemplate, PageParam pageParam, String tableName, Class clazz) {
         ResultPage resultPage = new ResultPage();
-        SqlParams sqlParams = SqlHelper.mapToSql4SelectPage(pageParam, baseSql);
-        List result = jdbcTemplate.query(sqlParams.getSql(), sqlParams
-                .getParams(), new BeanPropertyRowMapper<>(
-                clazz));
+        SqlParams countSql = SqlHelper.mapToSql4SelectCount(pageParam, tableName);
+        int totalSize = jdbcTemplate.queryForObject(countSql.getSql(), countSql.getParams(), Integer.class);
+        resultPage.setTotalNum(totalSize);
+        if (totalSize > 0) {
+            SqlParams sqlParams = SqlHelper.mapToSql4SelectPage(pageParam, tableName);
+            List result = jdbcTemplate.query(sqlParams.getSql(), sqlParams
+                    .getParams(), new BeanPropertyRowMapper<>(
+                    clazz));
+            resultPage.setResult(result);
+        }
         resultPage.setCurrentPage(pageParam.getCurrentPage());
         resultPage.setPageSize(pageParam.getPageSize());
-        resultPage.setResult(result);
         return resultPage;
-
     }
 
     /**
@@ -215,7 +255,7 @@ public class SqlHelper {
      * @param obj
      * @return
      */
-    public static SqlParams entityToInsertSql(Object obj) {
+    public static SqlParams entityToSql4Insert(Object obj) {
         EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(obj.getClass());
         Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
         Map<String, Object> columnValues = getEntityColumnValues(columnFieldMapper, obj);
@@ -223,7 +263,7 @@ public class SqlHelper {
         return mapToSql4Insert(columnValues);
     }
 
-    public static SqlParams entityToEditSql(Object entity) {
+    public static SqlParams entityToSql4Edit(Object entity) {
         EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(entity.getClass());
         Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
         Map<String, Object> columnValues = getEntityColumnValues(columnFieldMapper, entity);
@@ -240,7 +280,7 @@ public class SqlHelper {
      * @param obj
      * @return
      */
-    public static SqlParams entityToUpdateSqlById(Object obj) {
+    public static SqlParams entityToSql4UpdateById(Object obj) {
         EntityTableRowMapper entityTableRowMapper = EntityMapperFactory.getEntityTableRowMapper(obj.getClass());
         Map<String, Field> columnFieldMapper = entityTableRowMapper.getColumnFieldMapper();
         Map<String, Object> columnValues = getEntityColumnValues(columnFieldMapper, obj);
@@ -266,16 +306,18 @@ public class SqlHelper {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(DATABASE_TABLE, "asa");
         params.put("sasa", "aaaa");
-        MenuEntity menuEntity = new MenuEntity();
-        menuEntity.setComponent("aaa");
-        menuEntity.setIcon("bbb");
-        menuEntity.setOrderNo(1);
-        menuEntity.setId(1);
-        for (int i = 0; i < 100; i++) {
-            SqlParams params1 = entityToUpdateSqlById(menuEntity);
-            System.out.println(params1.getSql());
-        }
-
-//        System.out.println(SqlHelper.mapToSql4Insert(params).getSql());
+//        MenuEntity menuEntity = new MenuEntity();
+//        menuEntity.setComponent("aaa");
+//        menuEntity.setIcon("bbb");
+//        menuEntity.setOrderNo(1);
+//        menuEntity.setId(1);
+//        for (int i = 0; i < 100; i++) {
+//            SqlParams params1 = entityToUpdateSqlById(menuEntity);
+//            System.out.println(params1.getSql());
+//        }
+        PageParam pageParam = new PageParam();
+        pageParam.setParams(params);
+        SqlParams params1 = mapToSql4SelectPage(pageParam, "aaaa");
+        System.out.println(params1.getSql());
     }
 }
