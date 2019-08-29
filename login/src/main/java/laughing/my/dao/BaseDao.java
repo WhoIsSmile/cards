@@ -25,7 +25,7 @@ public class BaseDao {
      * @param entity
      */
     public int edit(Object entity) {
-        SqlParams params = SqlHelper.entityToEditSql(entity);
+        SqlParams params = SqlHelper.entityToSql4Edit(entity);
         return jdbcTemplate.update(params.getSql(), params.getParams());
     }
 
@@ -37,7 +37,7 @@ public class BaseDao {
      * @return
      */
     public int save(Object entity) {
-        SqlParams params = SqlHelper.entityToInsertSql(entity);
+        SqlParams params = SqlHelper.entityToSql4Insert(entity);
         return jdbcTemplate.update(params.getSql(), params.getParams());
     }
 
@@ -50,7 +50,7 @@ public class BaseDao {
      * @description 如果字段想置空 ，字段必须是“”字符串，而不是null，不然不介意使用这个方法
      */
     public int updateById(Object entity) {
-        SqlParams params = SqlHelper.entityToUpdateSqlById(entity);
+        SqlParams params = SqlHelper.entityToSql4UpdateById(entity);
         return jdbcTemplate.update(params.getSql(), params.getParams());
     }
 

@@ -67,8 +67,7 @@ public class MenuDao extends BaseDao{
      */
     public ResultPage findMenuListByPage(PageParam pageParam) {
         ResultPage<Menu> resultPage;
-        String baseSql = "select *  from sys_menu where  1=1 ";
-        resultPage = SqlHelper.findDataByPage(jdbcTemplate, pageParam, baseSql, Menu.class);
+        resultPage = SqlHelper.findDataByPage(jdbcTemplate, pageParam, "sys_menu", Menu.class);
         return resultPage;
     }
 
@@ -84,13 +83,5 @@ public class MenuDao extends BaseDao{
                 MenuEntity.class));
     }
 
-    public void edit(MenuEntity menuEntity) {
-        SqlParams params;
-        if (menuEntity.getId() == null) {
-            params = SqlHelper.entityToInsertSql(menuEntity);
-        } else {
-            params = SqlHelper.entityToUpdateSqlById(menuEntity);
-        }
-        jdbcTemplate.update(params.getSql(), params.getParams());
-    }
+
 }
