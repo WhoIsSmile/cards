@@ -41,7 +41,7 @@ public class EntityMapperFactory {
 
     // 这里可以做初始化所有entity
     //"laughing.my.entity"
-    static void init(String packageName) {
+   public static void init(String packageName) {
         List<Class> clazzList = ScanEntityPackage.getClasses(packageName);
         if (clazzList != null) {
             return;

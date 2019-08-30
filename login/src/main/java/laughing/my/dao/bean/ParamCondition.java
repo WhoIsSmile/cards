@@ -12,8 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 public class ParamCondition {
+    /**
+     * 参数具体的值
+     */
     private Object param;
-    private ConditionEnum conditionEnum;
+    /**
+     * 默认是equals
+     */
+    private ConditionEnum conditionEnum = ConditionEnum.EQUALS;
 
 //    public String getCondition() {
 //        if (conditionEnum.equals(ConditionEnum.EQUALS)) {

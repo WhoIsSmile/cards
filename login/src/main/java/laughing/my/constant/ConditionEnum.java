@@ -33,4 +33,8 @@ public enum ConditionEnum {
     ConditionEnum(String condition) {
         this.condition = condition;
     }
+
+    public String getCondition() {
+        return condition;
+    }
 }
