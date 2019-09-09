@@ -2,7 +2,9 @@ package laughing.my.dao.util;
 
 import laughing.my.entity.MenuEntity;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -50,12 +52,17 @@ public class EntityTableRowMapper {
     private Map<String, String> fieldNameColumnMapper = null;
 
     /**
+     *
+     */
+    private Map<String, String> columnFieldNameMapper = null;
+    /**
      * 数据库字段名和class属性的映射
      * K：表字段名称
      * V：class属性
      */
     private Map<String, Field> columnFieldMapper = null;
 
+    private Map<String, PropertyDescriptor> mappedFields = null;
 
     public static EntityTableRowMapper toEntityTableRowMapper(Class clazz) {
         Class clz = clazz;
@@ -73,6 +80,7 @@ public class EntityTableRowMapper {
         Set<String> fieldNames = new HashSet<>(size);
         entityTableRowMapper.setTableClass(clz);
         entityTableRowMapper.setTableName(EntityUtils.getTableName(clz));
+        initPropertyDescriptor(clazz, entityTableRowMapper);
 //        mapper.setIdName(EntityUtils.idColumnName(clz));
         entityTableRowMapper.setColumnFieldMapper(columnFieldMap);
         for (Map.Entry<String, Field> entry : columnFieldMap.entrySet()) {
@@ -89,6 +97,20 @@ public class EntityTableRowMapper {
         return entityTableRowMapper;
     }
 
+    protected static void initPropertyDescriptor(Class mappedClass, EntityTableRowMapper entityTableRowMapper) {
+        Map<String, PropertyDescriptor> mappedFields = new HashMap();
+        PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(mappedClass);
+        for (PropertyDescriptor pd : pds) {
+            if (pd.getWriteMethod() != null) {
+                mappedFields.put(pd.getName().toLowerCase(), pd);
+                String underscoredName = pd.getName().toLowerCase();
+                if (pd.getName().toLowerCase().equals(underscoredName)) {
+                    mappedFields.put(underscoredName, pd);
+                }
+            }
+        }
+        entityTableRowMapper.setMappedFields(mappedFields);
+    }
 //EntityTableRowMapper(){
 //    Class clazz = getClass();
 //
