@@ -43,7 +43,7 @@ public class EntityMapperFactory {
     //"laughing.my.entity"
    public static void init(String packageName) {
         List<Class> clazzList = ScanEntityPackage.getClasses(packageName);
-        if (clazzList != null) {
+        if (clazzList == null) {
             return;
         }
         for (int i = 0; i < clazzList.size(); i++) {

@@ -3,6 +3,7 @@ package laughing.my.dao;
 import laughing.my.dao.bean.PageParam;
 import laughing.my.dao.bean.ResultPage;
 import laughing.my.dao.bean.SqlParams;
+import laughing.my.dao.util.MyBeanPropertyRowMapper;
 import laughing.my.dao.util.SqlHelper;
 import laughing.my.entity.BaseEntity;
 import laughing.my.entity.MenuEntity;
@@ -79,7 +80,7 @@ public class MenuDao extends BaseDao{
      */
     public List<MenuEntity> findMenuList() {
         String sql = "select * from sys_menu  order by parentMenuId , orderNo";
-        return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(
+        return jdbcTemplate.query(sql.toString(), new MyBeanPropertyRowMapper<>(
                 MenuEntity.class));
     }
 

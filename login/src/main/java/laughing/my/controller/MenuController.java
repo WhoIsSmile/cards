@@ -1,5 +1,7 @@
 package laughing.my.controller;
 
+import laughing.my.dao.MenuDao;
+import laughing.my.entity.MenuEntity;
 import laughing.my.service.MenuService;
 import laughing.my.service.dto.UserMenuDTO;
 import laughing.utils.global.ErrorEnum;
@@ -23,9 +25,10 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private MenuDao menuDao;
 
     /**
-     *
      * @param request
      * @return
      */
@@ -35,8 +38,10 @@ public class MenuController {
         return new RsResult(ErrorEnum.SUCCESS, list);
     }
 
-//    public RsResult editMenu(){
-//
-//    }
+    @RequestMapping("test")
+    public RsResult editMenu() {
+        List<MenuEntity> list = menuDao.findMenuList();
+        return new RsResult(ErrorEnum.SUCCESS,list);
+    }
 
 }

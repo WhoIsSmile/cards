@@ -21,7 +21,9 @@ public class PageParam {
     private boolean isAsc = true;
     private String orderBy = "id";
     //    private List<String>
-    // 字段条件
+    /**
+     * 字段条件 暂不支持一个字段多个条件
+     */
     private Map<String, ConditionEnum> conditionEnumMap = new HashMap<>();
     private Map<String, Object> params = new HashMap<String, Object>();
 

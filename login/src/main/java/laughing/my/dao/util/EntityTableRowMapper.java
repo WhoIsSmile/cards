@@ -52,7 +52,9 @@ public class EntityTableRowMapper {
     private Map<String, String> fieldNameColumnMapper = null;
 
     /**
-     *
+     * 数据库字段名和属性名称的映射
+     * K：表字段名称
+     * V: 属性名
      */
     private Map<String, String> columnFieldNameMapper = null;
     /**
@@ -76,6 +78,7 @@ public class EntityTableRowMapper {
         columnFieldMap.putAll(superColumnFieldMap);
         int size = columnFieldMap.size();
         Map<String, String> fieldNameColumnMapper = new HashMap<>(size);
+        Map<String, String> columnFieldNameMapper = new HashMap<>(size);
         Set<String> columnNames = new HashSet<>(size);
         Set<String> fieldNames = new HashSet<>(size);
         entityTableRowMapper.setTableClass(clz);
@@ -88,23 +91,31 @@ public class EntityTableRowMapper {
             Field field = entry.getValue();
             String fieldName = field.getName();
             fieldNameColumnMapper.put(fieldName, columnName);
+            columnFieldNameMapper.put(columnName,fieldName);
             fieldNames.add(fieldName);
             columnNames.add(columnName);
         }
         entityTableRowMapper.setColumnNames(columnNames);
         entityTableRowMapper.setFieldNameColumnMapper(fieldNameColumnMapper);
         entityTableRowMapper.setFieldNames(fieldNames);
+        entityTableRowMapper.setColumnFieldNameMapper(fieldNameColumnMapper);
         return entityTableRowMapper;
     }
 
+    /**
+     * PropertyDescriptor
+     *
+     * @param mappedClass
+     * @param entityTableRowMapper
+     */
     protected static void initPropertyDescriptor(Class mappedClass, EntityTableRowMapper entityTableRowMapper) {
         Map<String, PropertyDescriptor> mappedFields = new HashMap();
         PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(mappedClass);
         for (PropertyDescriptor pd : pds) {
             if (pd.getWriteMethod() != null) {
-                mappedFields.put(pd.getName().toLowerCase(), pd);
-                String underscoredName = pd.getName().toLowerCase();
-                if (pd.getName().toLowerCase().equals(underscoredName)) {
+                mappedFields.put(pd.getName(), pd);
+                String underscoredName = pd.getName();
+                if (pd.getName().equals(underscoredName)) {
                     mappedFields.put(underscoredName, pd);
                 }
             }
@@ -129,8 +140,9 @@ public class EntityTableRowMapper {
 
 
     public static void main(String[] args) {
-        EntityTableRowMapper entityTableRowMapper = new EntityTableRowMapper();
+//        EntityTableRowMapper entityTableRowMapper = new EntityTableRowMapper();
         MenuEntity entity = new MenuEntity();
-//        EntityTableRowMapper entityTableRowMapper = EntityTableRowMapper.toEntityTableRowMapper(entity);
+        EntityTableRowMapper entityTableRowMapper = EntityTableRowMapper.toEntityTableRowMapper(entity.getClass());
+        System.out.println("a");
     }
 }
