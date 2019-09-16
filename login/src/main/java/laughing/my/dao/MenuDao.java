@@ -36,8 +36,8 @@ public class MenuDao extends BaseDao{
     public List<MenuEntity> findMenuByUserId(String userId) {
         StringBuilder sql = new StringBuilder("select menu.* ")
                 .append(" from  sys_user_role user_role,sys_menu menu, sys_role_menu role_menu ")
-                .append(" where user_role.userId = ? and user_role.roleId = role_menu.roleId and role_menu.menuId=menu.id ")
-                .append(" GROUP BY menu.id order by menu.parentMenuId , menu.orderNo ");
+                .append(" where user_role.user_id = ? and user_role.role_id = role_menu.role_id and role_menu.menu_id=menu.id ")
+                .append(" GROUP BY menu.id order by menu.parent_menu_id , menu.order_no ");
         List<Object> params = new ArrayList<>(1);
         params.add(userId);
         List<MenuEntity> result = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(
@@ -56,7 +56,7 @@ public class MenuDao extends BaseDao{
         String sql = "select * from sys_menu where id=?";
         List<Object> params = new ArrayList<>(1);
         params.add(menuId);
-        return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(
+        return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), new MyBeanPropertyRowMapper<>(
                 MenuEntity.class));
     }
 
@@ -79,7 +79,7 @@ public class MenuDao extends BaseDao{
      * @return
      */
     public List<MenuEntity> findMenuList() {
-        String sql = "select * from sys_menu  order by parentMenuId , orderNo";
+        String sql = "select * from sys_menu  order by parent_menu_id , order_no";
         return jdbcTemplate.query(sql.toString(), new MyBeanPropertyRowMapper<>(
                 MenuEntity.class));
     }

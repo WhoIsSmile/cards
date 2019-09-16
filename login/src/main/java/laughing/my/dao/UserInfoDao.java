@@ -1,6 +1,7 @@
 package laughing.my.dao;
 
 
+import laughing.my.dao.util.MyBeanPropertyRowMapper;
 import laughing.my.entity.UserInfoEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,10 @@ public class UserInfoDao extends BaseDao {
      * @return
      */
     public UserInfoEntity findUserInfoByUserAccount(String userAccount) {
-        String sql = "select *  from sys_user_info where userAccount = ? limit 1";
+        String sql = "select *  from sys_user_info where user_account = ? limit 1";
         List<Object> params = new ArrayList<>(1);
         params.add(userAccount);
-        UserInfoEntity result = jdbcTemplate.queryForObject(sql, params.toArray(), new BeanPropertyRowMapper<>(
+        UserInfoEntity result = jdbcTemplate.queryForObject(sql, params.toArray(), new MyBeanPropertyRowMapper<>(
                 UserInfoEntity.class));
         return result;
     }
@@ -55,7 +56,7 @@ public class UserInfoDao extends BaseDao {
         String sql = "select * from sys_user_info where token=?";
         List<Object> params = new ArrayList<>(1);
         params.add(token);
-        UserInfoEntity result = jdbcTemplate.queryForObject(sql, params.toArray(), new BeanPropertyRowMapper<>(
+        UserInfoEntity result = jdbcTemplate.queryForObject(sql, params.toArray(), new MyBeanPropertyRowMapper<>(
                 UserInfoEntity.class));
         return result;
     }

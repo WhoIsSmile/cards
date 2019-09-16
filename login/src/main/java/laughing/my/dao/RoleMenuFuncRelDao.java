@@ -2,6 +2,7 @@ package laughing.my.dao;
 
 
 
+import laughing.my.dao.util.MyBeanPropertyRowMapper;
 import laughing.my.entity.RoleMenuFuncRelEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -28,10 +29,10 @@ public class RoleMenuFuncRelDao  extends  BaseDao{
      * @return
      */
     public List<RoleMenuFuncRelEntity> findFunctionListByRoleId(String roleId) {
-        String sql = "select *  from  sys_role_menu_func  where roleId=? order by menuId";
+        String sql = "select *  from  sys_role_menu_func  where role_id=? order by menu_id";
         List<Object> params = new ArrayList<>(1);
         params.add(roleId);
-        List<RoleMenuFuncRelEntity> result = jdbcTemplate.query(sql, params.toArray(), new BeanPropertyRowMapper<>(
+        List<RoleMenuFuncRelEntity> result = jdbcTemplate.query(sql, params.toArray(), new MyBeanPropertyRowMapper<>(
                 RoleMenuFuncRelEntity.class));
         return result;
     }
@@ -44,7 +45,7 @@ public class RoleMenuFuncRelDao  extends  BaseDao{
      * @return
      */
     public List<String> findFuncActionByUserId(String userId) {
-        String sql = "select DISTINCT (menuFunc.funcAction) from sys_user_role userRole ,sys_role_menu_func menuFunc where userRole.userId=? and userRole.roleId=menuFunc.roleId";
+        String sql = "select DISTINCT (menuFunc.func_action) from sys_user_role userRole ,sys_role_menu_func menuFunc where userRole.user_id=? and userRole.role_id=menuFunc.role_id";
         List<Object> params = new ArrayList<>(1);
         params.add(userId);
         List<String> result = jdbcTemplate.queryForList(sql, params.toArray(), String.class);

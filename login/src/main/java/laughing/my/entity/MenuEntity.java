@@ -16,12 +16,12 @@ public class MenuEntity extends BaseEntity {
     /**
      * 菜单名称
      */
-    @Column(name = "menuName")
+    @Column(name = "menu_name")
     private String menuName;
     /**
      * 父级菜单ID 0：是顶级菜单
      */
-    @Column(name = "parentMenuId")
+    @Column(name = "parent_menu_id")
     private String parentMenuId;
 
 
@@ -35,7 +35,7 @@ public class MenuEntity extends BaseEntity {
     /**
      * 排序
      */
-    @Column(name = "orderNo")
+    @Column(name = "order_nso")
     private int orderNo;
     /**
      * 图标

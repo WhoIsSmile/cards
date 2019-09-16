@@ -21,11 +21,11 @@ public class BaseEntity {
     /**
      * 创建时间
      */
-    @Column(name="createTime")
+    @Column(name="create_time")
     private Date createTime;
     /**
      * 更新时间
      */
-    @Column(name="updateTime")
+    @Column(name="update_time")
     private Date updateTime;
 }

@@ -98,7 +98,7 @@ public class EntityTableRowMapper {
         entityTableRowMapper.setColumnNames(columnNames);
         entityTableRowMapper.setFieldNameColumnMapper(fieldNameColumnMapper);
         entityTableRowMapper.setFieldNames(fieldNames);
-        entityTableRowMapper.setColumnFieldNameMapper(fieldNameColumnMapper);
+        entityTableRowMapper.setColumnFieldNameMapper(columnFieldNameMapper);
         return entityTableRowMapper;
     }
 

@@ -41,7 +41,7 @@ public class EntityMapperFactory {
 
     // 这里可以做初始化所有entity
     //"laughing.my.entity"
-   public static void init(String packageName) {
+    public static void init(String packageName) {
         List<Class> clazzList = ScanEntityPackage.getClasses(packageName);
         if (clazzList == null) {
             return;
@@ -49,6 +49,7 @@ public class EntityMapperFactory {
         for (int i = 0; i < clazzList.size(); i++) {
             EntityTableRowMapper mapper = EntityTableRowMapper.toEntityTableRowMapper(clazzList.get(i));
             if (mapper != null) {
+                log.info("--init EntityTableRowMapper -- {} success", clazzList.get(i).getName());
                 entityMap.put(clazzList.get(i).getName(), mapper);
             }
         }

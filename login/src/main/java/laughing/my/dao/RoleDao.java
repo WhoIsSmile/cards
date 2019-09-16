@@ -4,6 +4,7 @@ package laughing.my.dao;
 import laughing.my.dao.bean.PageParam;
 import laughing.my.dao.bean.ResultPage;
 import laughing.my.dao.bean.SqlParams;
+import laughing.my.dao.util.MyBeanPropertyRowMapper;
 import laughing.my.dao.util.SqlHelper;
 import laughing.my.entity.RoleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +51,10 @@ public class RoleDao  extends  BaseDao{
      * @return
      */
     public List<RoleEntity> findRoleListByUserId(String userId) {
-        String sql = "select sys_role.* from sys_role ,sys_user_role where sys_user_role.userId=? and sys_user_role.roleId=sys_role.id";
+        String sql = "select sys_role.* from sys_role ,sys_user_role where sys_user_role.user_id=? and sys_user_role.role_id=sys_role.id";
         List<Object> params = new ArrayList<>(1);
         params.add(userId);
-        List<RoleEntity> result = jdbcTemplate.query(sql, params.toArray(), new BeanPropertyRowMapper<>(
+        List<RoleEntity> result = jdbcTemplate.query(sql, params.toArray(), new MyBeanPropertyRowMapper<>(
                 RoleEntity.class));
         return result;
     }

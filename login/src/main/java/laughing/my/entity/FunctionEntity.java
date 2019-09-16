@@ -2,6 +2,7 @@ package laughing.my.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Table;
 
 /**
@@ -15,10 +16,12 @@ public class FunctionEntity extends BaseEntity {
     /**
      * 功能名称
      */
+    @Column(name = "func_name")
     private String funcName;
     /**
      * 功能code
      */
+    @Column(name = "func_code")
     private String funcCode;
 
 }

@@ -242,7 +242,7 @@ public class SqlHelper {
         if (totalSize > 0) {
             SqlParams sqlParams = SqlHelper.mapToSql4SelectPage(pageParam, tableName);
             result = jdbcTemplate.query(sqlParams.getSql(), sqlParams
-                    .getParams(), new BeanPropertyRowMapper<>(
+                    .getParams(), new MyBeanPropertyRowMapper<>(
                     clazz));
         }
         resultPage.setResult(result);
