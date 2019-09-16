@@ -1,12 +1,8 @@
 package laughing.my.dao.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.*;
 import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.util.Assert;
@@ -15,14 +11,14 @@ import java.beans.PropertyDescriptor;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
+/**
+ * 映射
+ *
+ * @param <T>
+ */
 @Slf4j
 public class MyBeanPropertyRowMapper<T> implements RowMapper<T> {
-
 
     /**
      * The class we are mapping to
@@ -58,15 +54,17 @@ public class MyBeanPropertyRowMapper<T> implements RowMapper<T> {
      *
      * @see ResultSetMetaData
      */
+    @Override
     public T mapRow(ResultSet rs, int rowNumber) throws SQLException {
         Assert.state(this.mappedClass != null, "Mapped class was not specified");
         // 创建实例
         T mappedObject = BeanUtils.instantiate(this.mappedClass);
+        // Spring委托BeanWrapper完成Bean属性的填充工作
         BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(mappedObject);
         initBeanWrapper(bw);
         ResultSetMetaData rsmd = rs.getMetaData();
         int columnCount = rsmd.getColumnCount();
-
+        // 字段和实体的映射
         for (int index = 1; index <= columnCount; index++) {
             // 字段名称
             String column = JdbcUtils.lookupColumnName(rsmd, index);
@@ -78,11 +76,9 @@ public class MyBeanPropertyRowMapper<T> implements RowMapper<T> {
             if (pd != null) {
                 try {
                     Object value = getColumnValue(rs, index, pd);
-                    if (log.isDebugEnabled() && rowNumber == 0) {
-                        log.debug("Mapping column '" + column + "' to property '" +
-                                pd.getName() + "' of type " + pd.getPropertyType());
-                    }
+                    log.debug("Mapping column '{}' to property '{}' of type {}", column, pd.getName(), pd.getPropertyType());
                     try {
+                        // 设置值
                         bw.setPropertyValue(pd.getName(), value);
                     } catch (TypeMismatchException e) {
                         if (value == null) {
