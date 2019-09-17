@@ -13,7 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
- * 映射
+ * 对象映射
  *
  * @param <T>
  */

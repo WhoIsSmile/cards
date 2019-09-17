@@ -11,11 +11,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 /**
  * @author huang.xiaolong
  * @create 2019-08-30 13:49:27
- * @desc
+ * @desc 初始化数据库和表映射关系
  **/
 @Configuration
 @Slf4j
 public class InitTablesMapper implements ApplicationListener<ContextRefreshedEvent> {
+    /**
+     * 扫描包的路径
+     */
     @Value("${table.mapper.package:laughing.my.entity}")
     private String tablePackages;
 

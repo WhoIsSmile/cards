@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 /**
  * @author laughing
- * @create 2018-04-01 19:04:36
+ * @create 2019-08-01 19:04:36
  * @desc 菜单功能表映射（1对多）
  **/
 @Data
