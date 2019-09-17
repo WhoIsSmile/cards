@@ -70,7 +70,7 @@ public class UserInfoDao extends BaseDao {
      // List<Map<String, Object>> result =
      // jdbcTemplate.queryForList(sqlParams.getSql(), sqlParams.getParams());
      List<GeneralizeArticle> result = jdbcTemplate.query(sqlParams.getSql(), sqlParams
-     .getParams(), new BeanPropertyRowMapper<GeneralizeArticle>(
+     .getParams(), new MyBeanPropertyRowMapper<GeneralizeArticle>(
      GeneralizeArticle.class));
 
      resultPage.setCurrentPage(pageParam.getCurrentPage());

@@ -36,7 +36,7 @@ public class RoleDao  extends  BaseDao{
         String baseSql = "select *  from sys_role where  1=1 ";
         SqlParams sqlParams = SqlHelper.mapToSql4SelectPage(pageParam, baseSql);
         List<RoleEntity> result = jdbcTemplate.query(sqlParams.getSql(), sqlParams
-                .getParams(), new BeanPropertyRowMapper<RoleEntity>(
+                .getParams(), new MyBeanPropertyRowMapper(
                 RoleEntity.class));
         resultPage.setCurrentPage(pageParam.getCurrentPage());
         resultPage.setPageSize(pageParam.getPageSize());

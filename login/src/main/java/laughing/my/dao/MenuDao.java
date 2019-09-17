@@ -40,14 +40,14 @@ public class MenuDao extends BaseDao{
                 .append(" GROUP BY menu.id order by menu.parent_menu_id , menu.order_no ");
         List<Object> params = new ArrayList<>(1);
         params.add(userId);
-        List<MenuEntity> result = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(
+        List<MenuEntity> result = jdbcTemplate.query(sql.toString(), params.toArray(), new MyBeanPropertyRowMapper<>(
                 MenuEntity.class));
         return result;
     }
 
 
     /**
-     * 根据menuId 查询
+     * 根据menuId 查询6
      *
      * @param menuId
      * @return

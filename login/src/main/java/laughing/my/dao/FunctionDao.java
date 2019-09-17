@@ -19,7 +19,7 @@ public class FunctionDao extends  BaseDao{
 //        String sql = "select *  from sys_role_menu roleMenu, sys_role_menu_func ";
 //        List<Object> params = new ArrayList<>(1);
 //        params.add(roleId);
-//        List<FunctionEntity> result = jdbcTemplate.query(sql, params.toArray(), new BeanPropertyRowMapper<>(
+//        List<FunctionEntity> result = jdbcTemplate.query(sql, params.toArray(), new MyBeanPropertyRowMapper<>(
 //                FunctionEntity.class));
 //        return result;
 //    }
