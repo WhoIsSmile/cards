@@ -21,7 +21,15 @@ public interface MenuService {
 
     /**
      * 编辑菜单
+     *
      * @param menuEntity
      */
     public void editMenu(MenuEntity menuEntity);
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    public void delete(long id);
 }

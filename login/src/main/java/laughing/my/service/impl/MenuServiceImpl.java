@@ -50,8 +50,12 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void editMenu(MenuEntity menuEntity) {
-        if (menuEntity.getId() != null) {
-
-        }
+        menuDao.edit(menuEntity);
     }
+
+    @Override
+    public void delete(long id) {
+        menuDao.deleteById(id);
+    }
+
 }

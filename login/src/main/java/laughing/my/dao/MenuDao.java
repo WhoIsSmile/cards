@@ -22,7 +22,7 @@ import java.util.List;
  * @desc 菜单
  **/
 @Repository
-public class MenuDao extends BaseDao{
+public class MenuDao extends BaseDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -84,5 +84,16 @@ public class MenuDao extends BaseDao{
                 MenuEntity.class));
     }
 
+    /**
+     * 通过Id删除
+     *
+     * @param id
+     * @return
+     */
+    public int deleteById(long id) {
+        String tableName = "sys_menu";
+        StringBuffer sql = new StringBuffer("delete from ").append(tableName).append(" where id=?");
+        return jdbcTemplate.update(sql.toString(), new Object[]{id});
+    }
 
 }
