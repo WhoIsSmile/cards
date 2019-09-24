@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class RsResult<T> {
+    private String transNo;
     private String code = ErrorEnum.SUCCESS.getErrorCode();
     private String message = ErrorEnum.SUCCESS.getErrorMsg();
     private T body;

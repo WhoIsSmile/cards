@@ -1,8 +1,10 @@
 package laughing.my.aop;
 
+import laughing.my.constant.CommonConstants;
 import laughing.my.utils.sys.IPUtil;
 import laughing.my.utils.sys.SystemTool;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.MDC;
@@ -39,11 +41,12 @@ public class TraceIdInterceptorAdapter extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         long startTime = System.currentTimeMillis();
         // 使用UUID 生成全局日志追踪ID
-        MDC.put(TRANCE_ID, getTraceId(request));
-        // 进入系统时间
-        MDC.put(START_TIME, DateFormatUtils.format(startTime, FORMAT_DATE_STYLE));
+        String transID = RandomStringUtils.randomAlphanumeric(10);
+        MDC.put(CommonConstants.TRANS_ID, transID);
+        MDC.put(CommonConstants.TRACE_ID, getTraceId(request, transID));
 
         log.info("request:[{}]", getAllRequestParamsInfo(request));
+        request.setAttribute(CommonConstants.REQUEST_START_TIME_KEY, startTime);
         return true;
     }
 
@@ -57,8 +60,8 @@ public class TraceIdInterceptorAdapter extends HandlerInterceptorAdapter {
 //            log.error("error print response body ：{}", e.getMessage());
 //        }
         // 清除MDC
-        MDC.remove(TRANCE_ID);
-        MDC.remove(START_TIME);
+        MDC.remove(CommonConstants.TRACE_ID);
+//        MDC.remove(START_TIME);
         super.afterCompletion(request, response, handler, ex);
     }
 
@@ -85,13 +88,12 @@ public class TraceIdInterceptorAdapter extends HandlerInterceptorAdapter {
      * @param request
      * @return
      */
-    private String getTraceId(HttpServletRequest request) {
-        String uuid = java.util.UUID.randomUUID().toString().replace("-", "");
+    private String getTraceId(HttpServletRequest request, String transId) {
         String ip = IPUtil.getIp(request);
         String hostName = SystemTool.getHostName();
         StringBuffer traceId = new StringBuffer("");
         //userIp-uuid-hostName-requestURI
-        traceId.append(ip).append(SEPARATOR).append(uuid).append(SEPARATOR).append(hostName)
+        traceId.append(ip).append(SEPARATOR).append(transId).append(SEPARATOR).append(hostName)
                 .append(SEPARATOR).append(request.getRequestURI());
         return traceId.toString();
     }
