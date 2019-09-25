@@ -2,13 +2,13 @@
 <configuration debug="false" scan="true" scanPeriod="30 seconds">
 
 
-    <springProperty scope="context" name="LOG_DIR" source="logging.path" defaultValue="/opt/logs/"/>
+    <springProperty scope="context" name="LOG_DIR" source="logging.path" defaultValue="/usr/nettv/logs/"/>
     <!-- 日志级别 -->
     <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root" defaultValue="info"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <Pattern>%date %level [%thread] %logger %msg%n</Pattern>
+            <Pattern>%date %X{traceId} %level [%thread] %logger %msg%n</Pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
