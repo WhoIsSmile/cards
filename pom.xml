@@ -8,10 +8,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <!--<module>login-server</module>-->
-        <module>work</module>
-        <module>web</module>
+        <!--<module>work</module>-->
+        <!--<module>web</module>-->
         <module>utils</module>
-        <module>login-client</module>
+        <!--<module>login-client</module>-->
         <!--<module>permission</module>-->
         <module>login</module>
     </modules>

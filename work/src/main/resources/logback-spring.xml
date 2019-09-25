@@ -9,6 +9,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <Pattern>%date %level [%thread] %logger %msg%n</Pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -21,6 +22,7 @@
         </rollingPolicy>
         <encoder>
             <Pattern>%date %X{traceId} %level %logger %msg%n</Pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
     <!-- 请求相应时间的打印-->
@@ -33,6 +35,7 @@
 
         <encoder>
             <Pattern>%X{startTime} %X{traceId} %date %msg%n</Pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
     <logger name="javax.net" level="error"/>

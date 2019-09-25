@@ -21,10 +21,7 @@ import java.util.*;
  **/
 @Slf4j
 public class TraceIdInterceptorAdapter extends HandlerInterceptorAdapter {
-    /**
-     * 跟踪ID
-     */
-    private final static String TRANCE_ID = "traceId";
+
     /**
      * 请求开始时间
      */
@@ -44,7 +41,7 @@ public class TraceIdInterceptorAdapter extends HandlerInterceptorAdapter {
         String transID = RandomStringUtils.randomAlphanumeric(10);
         MDC.put(CommonConstants.TRANS_ID, transID);
         MDC.put(CommonConstants.TRACE_ID, getTraceId(request, transID));
-
+        MDC.put(START_TIME, DateFormatUtils.format(startTime, FORMAT_DATE_STYLE));
         log.info("request:[{}]", getAllRequestParamsInfo(request));
         request.setAttribute(CommonConstants.REQUEST_START_TIME_KEY, startTime);
         return true;
@@ -53,15 +50,10 @@ public class TraceIdInterceptorAdapter extends HandlerInterceptorAdapter {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-// 打印时间
-        //        try {
-//            StatisticsLog.responseTimeLog(request, response, printResponseBody);
-//        } catch (Exception e) {
-//            log.error("error print response body ：{}", e.getMessage());
-//        }
         // 清除MDC
         MDC.remove(CommonConstants.TRACE_ID);
-//        MDC.remove(START_TIME);
+        MDC.remove(START_TIME);
+        MDC.remove(CommonConstants.TRANS_ID);
         super.afterCompletion(request, response, handler, ex);
     }
 
