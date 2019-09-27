@@ -2,7 +2,6 @@ package laughing.my.dao;
 
 import laughing.my.dao.bean.SqlParams;
 import laughing.my.dao.util.SqlHelper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

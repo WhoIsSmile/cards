@@ -2,13 +2,10 @@ package laughing.my.dao;
 
 import laughing.my.dao.bean.PageParam;
 import laughing.my.dao.bean.ResultPage;
-import laughing.my.dao.bean.SqlParams;
 import laughing.my.dao.util.MyBeanPropertyRowMapper;
 import laughing.my.dao.util.SqlHelper;
-import laughing.my.entity.BaseEntity;
 import laughing.my.entity.MenuEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -57,6 +54,20 @@ public class MenuDao extends BaseDao {
         List<Object> params = new ArrayList<>(1);
         params.add(menuId);
         return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), new MyBeanPropertyRowMapper<>(
+                MenuEntity.class));
+    }
+
+    /**
+     * 根据父节点查询所有子节点
+     *
+     * @param parentMenuId
+     * @return
+     */
+    public List<MenuEntity> findMenuByParentMenuId(String parentMenuId) {
+        String sql = "select * from sys_menu where parent_menu_id=?";
+        List<Object> params = new ArrayList<>(1);
+        params.add(parentMenuId);
+        return jdbcTemplate.query(sql.toString(), params.toArray(), new MyBeanPropertyRowMapper<>(
                 MenuEntity.class));
     }
 
