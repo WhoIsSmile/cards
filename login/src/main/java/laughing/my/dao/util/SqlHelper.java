@@ -8,7 +8,6 @@ import laughing.my.dao.bean.SqlParams;
 import laughing.my.exception.LaughingSqlException;
 import laughing.my.utils.StringTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.lang.reflect.Field;

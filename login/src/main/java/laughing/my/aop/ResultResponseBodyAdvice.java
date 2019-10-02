@@ -65,8 +65,11 @@ public class ResultResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     private void printLog(RsResult result, ServerHttpRequest serverHttpRequest) {
         ServletServerHttpRequest sshr = (ServletServerHttpRequest) serverHttpRequest;
         HttpServletRequest request = sshr.getServletRequest();
-        String sTime = request.getAttribute(CommonConstants.REQUEST_START_TIME_KEY).toString();
-        long startTime = Long.parseLong(sTime);
+        Object sTime = request.getAttribute(CommonConstants.REQUEST_START_TIME_KEY);
+        if (sTime == null) {
+            return;
+        }
+        long startTime = Long.parseLong(sTime.toString());
         long endTime = System.currentTimeMillis();
         StringBuffer stringBuffer = new StringBuffer(String.valueOf(endTime - startTime)).append(SEPARATOR)
                 .append(result.getCode()).append(SEPARATOR);
@@ -77,7 +80,7 @@ public class ResultResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                 log.error(e.getMessage());
             }
         }
-        MonitorLog.wirterMoniterLog(stringBuffer.toString());
+        MonitorLog.writerMonitorLog(stringBuffer.toString());
     }
 
 }

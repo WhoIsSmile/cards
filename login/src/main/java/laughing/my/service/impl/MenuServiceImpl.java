@@ -50,6 +50,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void editMenu(MenuEntity menuEntity) {
+        if (menuEntity.getId() == null) {
+            menuEntity.setCreateTime(new Date());
+        }
         menuDao.edit(menuEntity);
     }
 

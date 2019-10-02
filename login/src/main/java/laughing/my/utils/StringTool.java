@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * 
- * @author huang.xiaolong
+ * @author laughing
  * @date 2013-7-18
  */
 public class StringTool {

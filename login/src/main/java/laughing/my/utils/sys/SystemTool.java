@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 /**
  * 获取系统参数
  *
- * @author huang.xiaolong
+ * @author laughing
  * @date 2017-10-31 10:33:42
  */
 @Slf4j
@@ -20,6 +20,9 @@ public class SystemTool {
      */
     private static String hostName;
 
+    static {
+        getHostName();
+    }
 
     /**
      * 获取系统的HostName

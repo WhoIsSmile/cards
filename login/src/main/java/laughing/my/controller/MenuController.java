@@ -8,6 +8,7 @@ import laughing.utils.global.ErrorEnum;
 import laughing.utils.net.response.bean.RsResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,13 +56,12 @@ public class MenuController {
     }
 
     /**
-     * 编辑
+     * 编辑()
      *
      * @return
      */
     @RequestMapping("edit")
-    public RsResult edit() {
-        MenuEntity menuEntity = new MenuEntity();
+    public RsResult edit(@RequestBody MenuEntity menuEntity) {
         menuService.editMenu(menuEntity);
         return new RsResult(ErrorEnum.SUCCESS);
     }

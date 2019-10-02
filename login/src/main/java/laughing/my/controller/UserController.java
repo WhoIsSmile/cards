@@ -8,10 +8,13 @@ import laughing.utils.global.ErrorEnum;
 import laughing.utils.net.response.bean.RsResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +40,8 @@ public class UserController {
      * @throws Exception
      */
     @RequestMapping("login")
-    public RsResult userLogin(UserInfoParams params) throws Exception {
-        UserInfoEntity userInfo = userInfoService.userLogin(params.getUserName(), params.getPassword());
+    public RsResult userLogin(@RequestBody UserInfoParams params) throws Exception {
+        UserInfoEntity userInfo = userInfoService.userLogin(params.getUsername(), params.getPassword());
         String token = userInfoService.updateUserToken(userInfo.getId());
         userInfo.setToken(token);
         Map<String, Object> result = new HashMap<>(3);
@@ -53,7 +56,7 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("getInfo")
+    @RequestMapping("info")
     public RsResult getUserInfo(@RequestParam String token) throws Exception {
         UserInfoEntity userInfo = userInfoService.getUserInfoByToken(token);
         List<MenuRouter> menuList = userInfoService.findMenuRouters(String.valueOf(userInfo.getId()));
@@ -65,4 +68,15 @@ public class UserController {
         return new RsResult(ErrorEnum.SUCCESS, result);
     }
 
+    /**
+     * 登出（带实现）
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("logout")
+    public RsResult logout(HttpServletRequest request, HttpServletResponse response) {
+        return new RsResult(ErrorEnum.SUCCESS);
+    }
 }

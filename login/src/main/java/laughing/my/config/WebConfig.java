@@ -33,27 +33,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(traceIdInterceptorAdapter).addPathPatterns(registryPaths);
         super.addInterceptors(registry);
     }
-//
-//    @Bean
-//    public ServletRegistrationBean druidStatViewServlet() {
-//        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(),"/druid/*");
-//        Map<String, String> initParams = new HashMap<>();
-//        //　可配的属性都在 StatViewServlet 和其父类下
-//        initParams.put("loginUsername", "root");
-//        initParams.put("loginPassword", "1234");
-//        servletRegistrationBean.setInitParameters(initParams);
-//        return servletRegistrationBean;
-//    }
-//
-//    @Bean
-//    public FilterRegistrationBean druidWebStatFilter() {
-//        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new WebStatFilter());
-//        Map<String, String> initParams = new HashMap<>();
-//        initParams.put("exclusions", "*.js,*.css,/druid/*");
-//        filterRegistrationBean.setInitParameters(initParams);
-//        filterRegistrationBean.setUrlPatterns(Arrays.asList("/*"));
-//        return filterRegistrationBean;
-//    }
-
 
 }

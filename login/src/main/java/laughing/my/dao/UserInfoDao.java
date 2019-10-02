@@ -32,9 +32,12 @@ public class UserInfoDao extends BaseDao {
         String sql = "select *  from sys_user_info where user_account = ? limit 1";
         List<Object> params = new ArrayList<>(1);
         params.add(userAccount);
-        UserInfoEntity result = jdbcTemplate.queryForObject(sql, params.toArray(), new MyBeanPropertyRowMapper<>(
+        List<UserInfoEntity> result = jdbcTemplate.query(sql, params.toArray(), new MyBeanPropertyRowMapper<>(
                 UserInfoEntity.class));
-        return result;
+        if (result != null && result.size() > 0) {
+            return result.get(0);
+        }
+        return null;
     }
 
 

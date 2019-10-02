@@ -9,9 +9,12 @@ import org.slf4j.LoggerFactory;
  * @desc 监控日志
  **/
 public class MonitorLog {
+    /**
+     * 监控日志
+     */
     private static Logger MONITOR = LoggerFactory.getLogger("MONITOR");
 
-    public static void wirterMoniterLog(String monitorLog) {
+    public static void writerMonitorLog(String monitorLog) {
         MONITOR.info(monitorLog);
     }
 }

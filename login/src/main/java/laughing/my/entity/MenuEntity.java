@@ -35,7 +35,7 @@ public class MenuEntity extends BaseEntity {
     /**
      * 排序
      */
-    @Column(name = "order_nso")
+    @Column(name = "order_no")
     private int orderNo;
     /**
      * 图标
