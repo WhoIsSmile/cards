@@ -61,4 +61,15 @@ public class MenuServiceImpl implements MenuService {
         menuDao.deleteById(id);
     }
 
+    /**
+     *
+     * @param menuId
+     * @return
+     */
+    @Override
+    public List findMenuFunc(String menuId) {
+
+        return null;
+    }
+
 }

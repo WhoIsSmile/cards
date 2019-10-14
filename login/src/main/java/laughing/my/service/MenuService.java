@@ -32,4 +32,13 @@ public interface MenuService {
      * @param id
      */
     public void delete(long id);
+
+
+    /**
+     * 查询菜单功能
+     *
+     * @param menuId
+     * @return
+     */
+    public List findMenuFunc(String menuId);
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class BaseDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    protected JdbcTemplate jdbcTemplate;
 
     /**
      * 编辑

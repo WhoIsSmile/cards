@@ -1,4 +1,4 @@
-package laughing.my.controller;
+package laughing.my.controller.sys;
 
 import laughing.my.dao.MenuDao;
 import laughing.my.entity.MenuEntity;
@@ -72,4 +72,8 @@ public class MenuController {
         return new RsResult(ErrorEnum.SUCCESS, list);
     }
 
+//    @RequestMapping("func")
+//    public Object findMenuFunc(@RequestParam("menuId")String menuId){
+//
+//    }
 }

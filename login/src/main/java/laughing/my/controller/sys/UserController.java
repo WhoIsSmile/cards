@@ -1,4 +1,4 @@
-package laughing.my.controller;
+package laughing.my.controller.sys;
 
 import laughing.my.controller.dto.UserInfoParams;
 import laughing.my.entity.UserInfoEntity;

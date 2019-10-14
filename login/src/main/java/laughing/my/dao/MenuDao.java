@@ -5,6 +5,7 @@ import laughing.my.dao.bean.ResultPage;
 import laughing.my.dao.util.MyBeanPropertyRowMapper;
 import laughing.my.dao.util.SqlHelper;
 import laughing.my.entity.MenuEntity;
+import laughing.my.entity.MenuFuncRelEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -106,5 +107,6 @@ public class MenuDao extends BaseDao {
         StringBuffer sql = new StringBuffer("delete from ").append(tableName).append(" where id=?");
         return jdbcTemplate.update(sql.toString(), new Object[]{id});
     }
+
 
 }
