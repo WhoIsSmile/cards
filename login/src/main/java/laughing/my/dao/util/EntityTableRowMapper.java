@@ -2,6 +2,7 @@ package laughing.my.dao.util;
 
 import laughing.my.entity.MenuEntity;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
 import java.beans.PropertyDescriptor;
@@ -17,6 +18,7 @@ import java.util.Set;
  * @desc
  **/
 @Data
+@Slf4j
 public class EntityTableRowMapper {
     /**
      * id的字段名称
@@ -67,7 +69,9 @@ public class EntityTableRowMapper {
     public static EntityTableRowMapper toEntityTableRowMapper(Class clazz) {
         Class clz = clazz;
         String tableName = EntityUtils.getTableName(clz);
+        // 只认@Table注解的Class
         if (tableName == null) {
+            log.debug("{} isn't entity table mapper!", clz.getName());
             return null;
         }
         EntityTableRowMapper entityTableRowMapper = new EntityTableRowMapper();
@@ -89,7 +93,7 @@ public class EntityTableRowMapper {
             Field field = entry.getValue();
             String fieldName = field.getName();
             fieldNameColumnMapper.put(fieldName, columnName);
-            columnFieldNameMapper.put(columnName,fieldName);
+            columnFieldNameMapper.put(columnName, fieldName);
             fieldNames.add(fieldName);
             columnNames.add(columnName);
         }
@@ -97,6 +101,7 @@ public class EntityTableRowMapper {
         entityTableRowMapper.setFieldNameColumnMapper(fieldNameColumnMapper);
         entityTableRowMapper.setFieldNames(fieldNames);
         entityTableRowMapper.setColumnFieldNameMapper(columnFieldNameMapper);
+        log.debug("{} 表 字段映射:{}", tableName, columnFieldNameMapper.toString());
         return entityTableRowMapper;
     }
 
