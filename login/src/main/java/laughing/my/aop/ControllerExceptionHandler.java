@@ -1,5 +1,6 @@
 package laughing.my.aop;
 
+import laughing.my.utils.exception.ExceptionUtil;
 import laughing.utils.exception.LaughingException;
 import laughing.utils.global.ErrorEnum;
 import laughing.utils.net.response.bean.RsResult;
@@ -24,7 +25,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public RsResult handler(Exception ex, HttpServletRequest request) {
-        log.error(ex.getMessage(), ex);
+        ExceptionUtil.printExceptionInfo(ex);
         return new RsResult(ErrorEnum.SYSTEM_ERROR, new HashMap<>());
     }
 
@@ -40,6 +41,7 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public RsResult serviceHandler(LaughingException e, HttpServletRequest request) {
         log.error(new StringBuilder(e.getErrorEnum().getErrorMsg()).append("(").append(e.getErrorEnum().getErrorMsg()).append(")").toString());
+        ExceptionUtil.printExceptionInfo(e);
         return new RsResult(e.getErrorEnum(), new HashMap<>());
     }
 }

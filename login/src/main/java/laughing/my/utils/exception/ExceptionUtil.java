@@ -1,5 +1,6 @@
 package laughing.my.utils.exception;
 
+import laughing.utils.exception.LaughingException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,8 +18,16 @@ public class ExceptionUtil {
      */
     public static void printExceptionInfo(Exception e) {
         StackTraceElement element = e.getStackTrace()[0];
-        log.error("error cause : [{}] --> < exception at : {}.{}-[{}] >|< className : {} >", e, element.getFileName(), element.getMethodName(),
-                element.getLineNumber(), element.getClassName());
+        if (e instanceof LaughingException) {
+            LaughingException le = (LaughingException) e;
+            log.error("error cause : [{}] --> < exception at : {}.{}-[{}] >|< className : {} >|< code :{} - message : {}>", e, element.getFileName(), element.getMethodName(),
+                    element.getLineNumber(), element.getClassName(), le.getErrorEnum().getErrorCode(), le.getErrorEnum().getErrorMsg());
+        } else {
+            log.error("error cause : [{}] --> < exception at : {}.{}-[{}] >|< className : {} >", e, element.getFileName(), element.getMethodName(),
+                    element.getLineNumber(), element.getClassName());
+        }
+
+
     }
 
 
